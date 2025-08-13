@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Firma Transparente</title>
+<link rel="icon" href="ico.png" type="image/x-icon">
+<style>
+  :root{
+    --bg:#ffffff;--bg-alt:#f1f5f9;--fg:#0f172a;--fg-muted:#64748b;--border:#e2e8f0;
+    --primary:#4f46e5;--primary-hover:#4338ca;--shadow:0 8px 24px rgba(2,6,23,.08);
+    --radius:14px;--checker-a:#e5e7eb;--checker-b:#ffffff
+  }
+  body.dark{
+    --bg:#0f172a;--bg-alt:#111827;--fg:#f3f4f6;--fg-muted:#9ca3af;--border:#273449;
+    --primary:#6366f1;--primary-hover:#818cf8;--checker-a:#334155;--checker-b:#1e293b
+  }
+  body{
+    font-family:system-ui, sans-serif;
+    background:var(--bg);
+    color:var(--fg);
+    margin:0;
+    padding:20px;
+    transition:background .25s,color .25s
+  }
+  .container{max-width:1100px;margin:auto;display:flex;flex-direction:column;gap:20px}
+  h1{margin:0}
+
+  /* Hero section */
+  .hero{
+    text-align:center;
+    padding:20px;
+    background:var(--bg-alt);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+  }
+  .badge{
+    display:inline-block;
+    padding:4px 10px;
+    font-size:.8rem;
+    font-weight:bold;
+    background:linear-gradient(90deg,var(--primary),#a855f7);
+    color:#fff;
+    border-radius:999px;
+    margin-bottom:10px;
+  }
+  .hero h1{font-size:1.8rem;margin:0 0 8px 0;}
+  .hero p{color:var(--fg-muted);margin-bottom:14px;}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
+  .chip{
+    padding:6px 12px;
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:999px;
+    font-size:.85rem;
+  }
+
+  /* Layout columnas */
+  .main-grid{display:grid;gap:20px}
+  @media(min-width:900px){.main-grid{grid-template-columns:1fr 1fr}}
+
+  /* Área de carga */
+  .upload-area{
+    border:2px dashed var(--border);
+    padding:20px;
+    border-radius:var(--radius);
+    text-align:center;
+    background:var(--bg-alt);
+    cursor:pointer
+  }
+  .upload-area.dragover{
+    border-color:var(--primary);
+    background:var(--bg)
+  }
+
+  /* Vista previa */
+  .preview-wrap{
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    overflow:hidden;
+    display:grid;
+    place-items:center;
+    min-height:280px;
+    background:
+      linear-gradient(45deg,var(--checker-a) 25%,transparent 25%),
+      linear-gradient(-45deg,var(--checker-a) 25%,transparent 25%),
+      linear-gradient(45deg,transparent 75%,var(--checker-a) 75%),
+      linear-gradient(-45deg,transparent 75%,var(--checker-a) 75%);
+    background-size:24px 24px;
+    background-position:0 0,0 12px,12px -12px,-12px 0
+  }
+  .preview-wrap.white-bg{
+    background:#fff;
+    box-shadow:0 0 20px rgba(0,0,0,0.1);
+  }
+  canvas{max-width:100%;height:auto}
+
+  /* Switch */
+  .switch-container{display:flex;align-items:center;gap:10px;margin-top:10px}
+  .switch{position:relative;display:inline-block;width:50px;height:26px}
+  .switch input{opacity:0;width:0;height:0}
+  .slider{
+    position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;
+    background:#ccc;transition:.4s;border-radius:26px
+  }
+  .slider:before{
+    position:absolute;content:"";height:20px;width:20px;left:3px;bottom:3px;
+    background:white;transition:.4s;border-radius:50%
+  }
+  input:checked + .slider{background:var(--primary)}
+  input:checked + .slider:before{transform:translateX(24px)}
+
+  /* Botones */
+  .btn{
+    border:none;padding:10px 16px;border-radius:999px;
+    background:linear-gradient(90deg,var(--primary),#a855f7);
+    color:#fff;font-weight:bold;cursor:pointer;box-shadow:var(--shadow)
+  }
+  .btn:hover{filter:brightness(1.05)}
+  .actions{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
+
+  /* Controles */
+  .control{margin-bottom:15px}
+  .control label{display:flex;justify-content:space-between}
+  input[type=range]{width:100%}
+
+  /* Pasos adaptativos */
+  .steps{
+    display:grid;
+    gap:14px;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  }
+  .step-card{
+    background:var(--bg-alt);
+    padding:16px;
+    border-radius:var(--radius);
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    box-shadow:var(--shadow);
+  }
+  .step-icon{font-size:2rem}
+
+  /* Switches idioma/tema */
+  .switches{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+
+  /* Overlay */
+  .loading-overlay{
+    position:fixed;inset:0;
+    background:rgba(15,23,42,.55);
+    backdrop-filter:blur(8px);
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    z-index:9999;color:#fff;
+    opacity:0;pointer-events:none;
+    transition:opacity .18s
+  }
+  .loading-overlay.active{opacity:1;pointer-events:all}
+
+  /* Spinner + barra circular */
+  .progress-ring{
+    transform:rotate(-90deg);
+    width:80px;height:80px;
+  }
+  .progress-ring__circle{
+    stroke:#fff;
+    stroke-width:6;
+    fill:transparent;
+    stroke-linecap:round;
+    transition:stroke-dashoffset 0.2s;
+  }
+
+  footer{text-align:center;color:var(--fg-muted);font-size:.9rem;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="badge">Fase Beta 1.0</div>
+    <h1>Quita el fondo de tu firma en segundos</h1>
+    <p>Sube tu imagen, ajusta la tolerancia y el suavizado, y obtén una firma con fondo transparente lista para usar.</p>
+    <div class="chips">
+      <div class="chip">Formatos: PNG, JPG, WebP</div>
+      <div class="chip">Carga fácil por clic o arrastre</div>
+      <div class="chip">Multi-idioma y tema</div>
+    </div>
+  </section>
+
+  <div class="main-grid">
+    <!-- Columna Izquierda -->
+    <div>
+      <section id="upload" class="upload-area">
+        <p>Arrastra o selecciona tu imagen</p>
+        <input type="file" id="fileInput" accept="image/*" hidden>
+      </section>
+      <section id="previewContainer" class="preview-wrap" style="display:none;">
+        <canvas id="resultCanvas"></canvas>
+      </section>
+      <div class="switch-container" style="display:none;">
+        <label>Antes</label>
+        <label class="switch">
+          <input type="checkbox" id="beforeAfterToggle">
+          <span class="slider"></span>
+        </label>
+        <label>Después</label>
+      </div>
+    </div>
+
+    <!-- Columna Derecha -->
+    <div>
+      <div id="controls" style="display:none;">
+        <div class="control">
+          <label for="tolerance">Tolerancia <span id="tolVal">25</span></label>
+          <input type="range" id="tolerance" min="1" max="100" value="25">
+        </div>
+        <div class="control">
+          <label for="feather">Suavizado <span id="featherVal">5</span></label>
+          <input type="range" id="feather" min="0" max="40" value="5">
+        </div>
+      </div>
+      <div class="actions" style="display:none;" id="downloadActions">
+        <button id="downloadBtn" class="btn">Descargar</button>
+<div class="actions" style="display:none;">
+        <button id="resetBtn" class="btn">Restaurar</button>
+      </div>
+<p class="hint" data-i18n="hintTip"><i>Tip: usa imágenes con fondo uniforme y buena iluminación para mejores resultados.</i></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pasos -->
+  <section class="steps">
+    <div class="step-card"><div class="step-icon">📂</div><div>Sube tu imagen</div><p>Elige un PNG o JPG con bordes claros entre el texto y el fondo.</p></div>
+    <div class="step-card"><div class="step-icon">🎚</div><div>Ajusta tolerancia y suavizado</div><p>Podrás aplicar tolerancia con suavizado a tu gusto.</p></div>
+    <div class="step-card"><div class="step-icon">⬇️</div><div>Descarga en PNG</div><p>Exporta como PNG transparente o copia al portapapeles para usar al instante.</p></div>
+  </section>
+
+
+    <!-- Política de Privacidad -->
+<section id="privacy-policy" style="margin-top:40px;">
+  <h2>Política de Privacidad</h2>
+  <p>
+    Esta aplicación procesa las imágenes únicamente en tu dispositivo. No se almacenan, comparten ni envían archivos a servidores externos. No recopilamos datos personales ni utilizamos tus imágenes para ningún propósito distinto al procesamiento solicitado por el usuario.
+  </p>
+  <p>
+    Si tienes dudas sobre la privacidad, puedes contactarnos a través del correo <i>agente.chococreativo@gmail.com.</i>
+  </p>
+</section>
+
+<!-- Uso de Cookies -->
+<section id="cookie-policy" style="margin-top:32px;">
+  <h2>Uso de Cookies</h2>
+  <p>
+    Este sitio no utiliza cookies de seguimiento ni de terceros. Solo se emplean cookies técnicas si son necesarias para el funcionamiento básico de la aplicación. No se realiza análisis de navegación ni se comparte información con terceros.
+  </p>
+  <!-- Switches -->
+  <div class="switches">
+    <button id="langSwitch" class="btn">🌐 English</button>
+    <button id="themeSwitch" class="btn">🌙 Modo Oscuro</button>
+  </div>
+</section>
+  <footer>© 2025 by Kevin Hurtado Fase beta. Todos los derechos reservados.</footer>
+</div>
+
+<!-- Overlay -->
+<div id="loadingOverlay" class="loading-overlay">
+  <svg class="progress-ring" width="80" height="80">
+    <circle class="progress-ring__circle" stroke="white" stroke-width="6" fill="transparent" r="36" cx="40" cy="40"/>
+  </svg>
+  <div id="loadingText" style="margin-top:10px;">Procesando...</div>
+</div>
+
+<script>
+/* ======== Idioma y Modo Oscuro ======== */
+
+// Diccionario de traducciones
+const translations = {
+  es: {
+    heroTitle: "Quita el fondo de tu firma en segundos",
+    heroSubtitle: "Sube tu imagen, ajusta la tolerancia y el suavizado, y obtén una firma con fondo transparente lista para usar.",
+    chipFormats: "Formatos: PNG, JPG, WebP",
+    chipEasy: "Carga fácil por clic o arrastre",
+    chipMulti: "Multi-idioma y tema",
+    uploadPrompt: "Arrastra o selecciona tu imagen",
+    steps: ["Sube tu imagen", "Ajusta tolerancia y suavizado", "Descarga en PNG"],
+    before: "Antes",
+    after: "Después",
+    reset: "Restablecer",
+    download: "Descargar PNG",
+    processing: "Procesando...",
+    langBtn: "🌐 English",
+    themeBtn: "🌙 Modo Oscuro"
+  },
+  en: {
+    heroTitle: "Remove your signature's background in seconds",
+    heroSubtitle: "Upload your image, adjust tolerance and feather, and get a transparent background signature ready to use.",
+    chipFormats: "Formats: PNG, JPG, WebP",
+    chipEasy: "Easy upload by click or drag",
+    chipMulti: "Multi-language & theme",
+    uploadPrompt: "Drag or select your image",
+    steps: ["Upload your image", "Adjust tolerance & feather", "Download as PNG"],
+    before: "Before",
+    after: "After",
+    reset: "Reset",
+    download: "Download PNG",
+    processing: "Processing...",
+    langBtn: "🌐 Español",
+    themeBtn: "🌙 Dark Mode"
+  }
+};
+
+let currentLang = localStorage.getItem("lang") || "es";
+let darkMode = localStorage.getItem("theme") === "dark";
+
+// Aplicar idioma
+function applyLanguage(lang) {
+  const t = translations[lang];
+  document.querySelector(".hero h1").textContent = t.heroTitle;
+  document.querySelector(".hero p").textContent = t.heroSubtitle;
+  document.querySelectorAll(".chip")[0].textContent = t.chipFormats;
+  document.querySelectorAll(".chip")[1].textContent = t.chipEasy;
+  document.querySelectorAll(".chip")[2].textContent = t.chipMulti;
+  document.querySelector("#upload p").textContent = t.uploadPrompt;
+  document.querySelectorAll(".step-card div:last-child").forEach((el, i) => el.textContent = t.steps[i]);
+  document.querySelector(".switch-container label:first-child").textContent = t.before;
+  document.querySelector(".switch-container label:last-child").textContent = t.after;
+  document.querySelector("#resetBtn").textContent = t.reset;
+  document.querySelector("#downloadBtn").textContent = t.download;
+  document.getElementById("loadingText").textContent = t.processing;
+  document.getElementById("langSwitch").textContent = t.langBtn;
+  document.getElementById("themeSwitch").textContent = t.themeBtn;
+}
+
+// Alternar idioma
+document.getElementById("langSwitch").addEventListener("click", () => {
+  currentLang = currentLang === "es" ? "en" : "es";
+  localStorage.setItem("lang", currentLang);
+  applyLanguage(currentLang);
+});
+
+// Modo oscuro
+function applyTheme(dark) {
+  document.body.classList.toggle("dark", dark);
+}
+
+document.getElementById("themeSwitch").addEventListener("click", () => {
+  darkMode = !darkMode;
+  localStorage.setItem("theme", darkMode ? "dark" : "light");
+  applyTheme(darkMode);
+});
+
+// Inicializar
+applyLanguage(currentLang);
+applyTheme(darkMode);
+
+const overlay=document.getElementById('loadingOverlay');
+const ring=document.querySelector('.progress-ring__circle');
+const radius=36;
+const circumference=2*Math.PI*radius;
+ring.style.strokeDasharray=`${circumference} ${circumference}`;
+ring.style.strokeDashoffset=circumference;
+
+function setProgress(percent){
+  const offset=circumference-(percent/100)*circumference;
+  ring.style.strokeDashoffset=offset;
+}
+
+function showLoading(s){overlay.classList.toggle('active',s);if(s)setProgress(0);}
+function updateProgress(p){setProgress(p);}
+
+const uploadArea=document.getElementById('upload');
+const fileInput=document.getElementById('fileInput');
+const tolSlider=document.getElementById('tolerance');
+const featherSlider=document.getElementById('feather');
+const tolVal=document.getElementById('tolVal');
+const featherVal=document.getElementById('featherVal');
+const previewContainer=document.getElementById('previewContainer');
+const resultCanvas=document.getElementById('resultCanvas');
+const beforeAfterToggle=document.getElementById('beforeAfterToggle');
+const resetBtn=document.getElementById('resetBtn');
+const controls=document.getElementById('controls');
+const downloadBtn=document.getElementById('downloadBtn');
+const downloadActions=document.getElementById('downloadActions');
+
+let imgOriginal=null;
+let workCanvas=document.createElement('canvas');
+let originalCanvas=document.createElement('canvas');
+
+function rgbToLab(r,g,b){r/=255;g/=255;b/=255;r=r>0.04045?Math.pow((r+0.055)/1.055,2.4):r/12.92;g=g>0.04045?Math.pow((g+0.055)/1.055,2.4):g/12.92;b=b>0.04045?Math.pow((b+0.055)/1.055,2.4):b/12.92;let x=(r*0.4124+g*0.3576+b*0.1805)/0.95047;let y=(r*0.2126+g*0.7152+b*0.0722)/1.0000;let z=(r*0.0193+g*0.1192+b*0.9505)/1.08883;x=x>0.008856?Math.pow(x,1/3):(7.787*x)+16/116;y=y>0.008856?Math.pow(y,1/3):(7.787*y)+16/116;z=z>0.008856?Math.pow(z,1/3):(7.787*z)+16/116;return[(116*y)-16,500*(x-y),200*(y-z)];}
+function computeBackgroundColor(imageData,w,h){const d=imageData.data;let r=0,g=0,b=0,count=0;const step=Math.max(2,Math.floor(Math.min(w,h)/100));for(let y=0;y<h;y+=step){for(let x=0;x<w;x+=step){if(x>step&&x<w-step&&y>step&&y<h-step)continue;const i=(y*w+x)*4;r+=d[i];g+=d[i+1];b+=d[i+2];count++;}}return count===0?[d[0],d[1],d[2]]:[Math.round(r/count),Math.round(g/count),Math.round(b/count)];}
+function processCurrentImage(){
+  if(!imgOriginal)return;
+  showLoading(true);
+  let progress=0;
+  const interval=setInterval(()=>{progress=Math.min(progress+5,90);updateProgress(progress)},80);
+  requestAnimationFrame(()=>{
+    const ctx=workCanvas.getContext('2d',{willReadFrequently:true});
+    workCanvas.width=imgOriginal.naturalWidth;
+    workCanvas.height=imgOriginal.naturalHeight;
+    ctx.drawImage(imgOriginal,0,0);
+    const {width:w,height:h}=workCanvas;
+    const imageData=ctx.getImageData(0,0,w,h);
+    const [bgR,bgG,bgB]=computeBackgroundColor(imageData,w,h);
+    const bgLab=rgbToLab(bgR,bgG,bgB);
+    const d=imageData.data;
+    const tol=parseInt(tolSlider.value,10);
+    const soft=parseInt(featherSlider.value,10);
+    const tolMin=Math.max(0,tol-soft);
+    const tolMax=tol+soft;
+    for(let i=0;i<d.length;i+=4){
+      const pxLab=rgbToLab(d[i],d[i+1],d[i+2]);
+      const deltaE=Math.hypot(pxLab[0]-bgLab[0],pxLab[1]-bgLab[1],pxLab[2]-bgLab[2]);
+      if(deltaE<=tolMin){d[i+3]=0;}
+      else if(deltaE<tolMax){d[i+3]=Math.round(d[i+3]*((deltaE-tolMin)/soft));}
+    }
+    ctx.putImageData(imageData,0,0);
+    drawProcessed();
+    clearInterval(interval);
+    updateProgress(100);
+    setTimeout(()=>showLoading(false),200);
+  });
+}
+function drawProcessed(){previewContainer.classList.remove('white-bg');const outCtx=resultCanvas.getContext('2d');resultCanvas.width=workCanvas.width;resultCanvas.height=workCanvas.height;outCtx.clearRect(0,0,workCanvas.width,workCanvas.height);outCtx.drawImage(workCanvas,0,0);}
+function drawOriginal(){previewContainer.classList.add('white-bg');const outCtx=resultCanvas.getContext('2d');resultCanvas.width=originalCanvas.width;resultCanvas.height=originalCanvas.height;outCtx.clearRect(0,0,originalCanvas.width,originalCanvas.height);outCtx.drawImage(originalCanvas,0,0);}
+function handleFile(file){
+  if(!file.type.startsWith('image/'))return;
+  if(file.size>10*1024*1024)return;
+  showLoading(true);
+  const img=new Image();
+  img.onload=()=>{
+    imgOriginal=img;
+    originalCanvas.width=img.width;
+    originalCanvas.height=img.height;
+    originalCanvas.getContext('2d').drawImage(img,0,0);
+    controls.style.display='block';
+    previewContainer.style.display='grid';
+    document.querySelector('.switch-container').style.display='flex';
+    document.querySelectorAll('.actions').forEach(a=>a.style.display='flex');
+    downloadActions.style.display='flex';
+    processCurrentImage();
+  };
+  img.src=URL.createObjectURL(file);
+}
+uploadArea.addEventListener('click',()=>fileInput.click());
+fileInput.addEventListener('change',e=>{if(e.target.files[0])handleFile(e.target.files[0])});
+uploadArea.addEventListener('dragover',e=>{e.preventDefault();uploadArea.classList.add('dragover')});
+uploadArea.addEventListener('dragleave',()=>uploadArea.classList.remove('dragover'));
+uploadArea.addEventListener('drop',e=>{e.preventDefault();uploadArea.classList.remove('dragover');if(e.dataTransfer.files[0])handleFile(e.dataTransfer.files[0])});
+tolSlider.addEventListener('input',()=>{tolVal.textContent=tolSlider.value;processCurrentImage()});
+featherSlider.addEventListener('input',()=>{featherVal.textContent=featherSlider.value;processCurrentImage()});
+beforeAfterToggle.addEventListener('change',()=>{beforeAfterToggle.checked?drawProcessed():drawOriginal()});
+resetBtn.addEventListener('click',()=>{tolSlider.value=25;featherSlider.value=5;tolVal.textContent=25;featherVal.textContent=5;processCurrentImage()});
+downloadBtn.addEventListener('click',()=>{const a=document.createElement('a');a.download='firma_transparente.png';a.href=resultCanvas.toDataURL('image/png');a.click();});
+</script>
+</body>
+</html>
