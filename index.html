@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Firma Transparente | Beta 1.0</title>
+<title>Firma Transparente | Beta 2</title>
 <link rel="icon" href="ico.png" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -88,8 +88,8 @@
   }
 
   /* Layout */
-  .main-grid { display: grid; gap: 24px; }
-  @media(min-width: 900px) { .main-grid { grid-template-columns: 1fr 1fr; } }
+  .editor-grid { display: grid; gap: 24px; }
+  @media(min-width: 900px) { .editor-grid { grid-template-columns: 1fr 1fr; } }
   .card { background-color: var(--bg-alt); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); }
 
   /* Área de Carga */
@@ -107,18 +107,21 @@
     justify-content: center;
     gap: 12px;
   }
+  .upload-area.compact {
+    padding: 16px;
+    flex-direction: row;
+    gap: 16px;
+  }
+  .upload-area.compact .upload-icon svg { width: 32px; height: 32px; }
+  .upload-area.compact .fg-muted { display: none; }
   .upload-area:hover, .upload-area.dragover {
     border-color: var(--primary);
     background-color: var(--bg-alt);
     transform: translateY(-4px);
   }
-  .upload-area.dragover {
-    box-shadow: 0 0 30px var(--primary);
-  }
+  .upload-area.dragover { box-shadow: 0 0 30px var(--primary); }
   .upload-icon { color: var(--fg-muted); transition: all .2s; }
-  .upload-area:hover .upload-icon, .upload-area.dragover .upload-icon {
-    color: var(--primary);
-  }
+  .upload-area:hover .upload-icon, .upload-area.dragover .upload-icon { color: var(--primary); }
 
   /* Vista Previa */
   .preview-wrap {
@@ -140,95 +143,65 @@
   .preview-wrap.white-bg { background: #fff; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
   canvas { max-width: 100%; height: auto; transition: all .3s; }
 
-  /* Controles */
-  .controls-card {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
+  /* Controles y Botones */
+  .controls-card { display: flex; flex-direction: column; gap: 20px; }
   .control label { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 500; }
-  input[type=range] {
-    -webkit-appearance: none; appearance: none;
-    width: 100%; height: 8px; background: var(--border);
-    border-radius: 8px; outline: none; transition: all .2s;
-  }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none; appearance: none;
-    width: 20px; height: 20px; border-radius: 50%;
-    background: var(--primary); cursor: pointer;
-    box-shadow: 0 0 0 3px var(--bg-alt), 0 0 0 5px var(--primary);
-  }
-  input[type=range]::-moz-range-thumb {
-    width: 20px; height: 20px; border-radius: 50%;
-    background: var(--primary); cursor: pointer;
-  }
-  .switch-container { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; background: var(--border); border-radius: 8px; outline: none; transition: all .2s; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--primary); cursor: pointer; box-shadow: 0 0 0 3px var(--bg-alt), 0 0 0 5px var(--primary); }
+  .switch-container { display: flex; align-items: center; gap: 10px; margin-top: 16px; justify-content: center;}
   .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
   .switch input { opacity: 0; width: 0; height: 0; }
   .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border); transition: .4s; border-radius: 26px; }
   .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
   input:checked + .slider { background-color: var(--primary); }
   input:checked + .slider:before { transform: translateX(24px); }
-
-  /* Botones */
   .actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
-  .btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    border: none; padding: 12px 20px; border-radius: 999px;
-    background: linear-gradient(90deg, var(--primary), #a855f7);
-    color: #fff; font-weight: 700; cursor: pointer;
-    box-shadow: var(--shadow); transition: all .2s;
-  }
+  .btn { display: inline-flex; align-items: center; gap: 8px; border: none; padding: 12px 20px; border-radius: 999px; background: linear-gradient(90deg, var(--primary), #a855f7); color: #fff; font-weight: 700; cursor: pointer; box-shadow: var(--shadow); transition: all .2s; white-space: nowrap; }
   .btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
   .btn-secondary { background: var(--bg-alt); color: var(--fg); border: 1px solid var(--border); }
   .btn-secondary:hover { background: var(--bg); border-color: var(--fg-muted); }
+  .btn:disabled { cursor: not-allowed; filter: grayscale(50%); opacity: 0.7; transform: none; }
 
-  /* Pasos */
-  .steps { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
-  .step-card {
-    background: var(--bg-alt); padding: 24px; border-radius: var(--radius); text-align: center;
-    display: flex; flex-direction: column; align-items: center; gap: 10px;
-    box-shadow: var(--shadow); transition: all .2s;
-  }
-  .step-card:hover { transform: translateY(-5px); }
-  .step-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 8px; }
-  .step-card h3 { font-size: 1.1rem; }
-  .step-card p { font-size: 0.9rem; color: var(--fg-muted); line-height: 1.5; margin: 0; }
-
-  /* Footer & Policies */
-  .policy-section {
-    background-color: var(--bg-alt); padding: 24px; border-radius: var(--radius);
-    box-shadow: var(--shadow); margin-top: 20px;
-  }
+  /* Políticas y Configuración */
+  .main-grid { display: grid; gap: 24px; }
+  @media(min-width: 900px) { .main-grid { grid-template-columns: 1fr 1fr; } }
+  .policy-section { background-color: var(--bg-alt); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); }
   .policy-section h2 { margin-bottom: 12px; }
   .policy-section p { color: var(--fg-muted); line-height: 1.6; }
   .policy-section p i { color: var(--primary); font-style: normal; }
   .switches { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
-  footer { text-align: center; color: var(--fg-muted); font-size: .9rem; margin-top: 32px; }
   
-  /* Overlay */
-  .loading-overlay {
-    position: fixed; inset: 0; background: rgba(15,23,42,.65); backdrop-filter: blur(8px);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    z-index: 9999; color: #fff; opacity: 0; pointer-events: none; transition: opacity .25s;
-  }
+  /* Historial */
+  .history-section { background-color: var(--bg-alt); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); }
+  .history-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; margin-top: 16px; }
+  .history-item { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+  .history-item img { display: block; width: 100%; height: 100%; object-fit: contain; background: linear-gradient(45deg, var(--checker-a) 25%, transparent 25%), linear-gradient(-45deg, var(--checker-a) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--checker-a) 75%), linear-gradient(-45deg, transparent 75%, var(--checker-a) 75%); background-size: 16px 16px; background-position: 0 0, 0 8px, 8px -8px, -8px 0; cursor: pointer; transition: transform .2s; }
+  .history-item:hover img { transform: scale(1.05); }
+  .history-delete { position: absolute; top: 4px; right: 4px; background: rgba(15, 23, 42, 0.7); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transition: opacity .2s; }
+  .history-item:hover .history-delete { opacity: 1; }
+
+  /* Footer y Overlays */
+  footer { text-align: center; color: var(--fg-muted); font-size: .9rem; margin-top: 32px; }
+  footer a { color: var(--primary); text-decoration: none; font-weight: 500; }
+  footer a:hover { text-decoration: underline; }
+  .loading-overlay { position: fixed; inset: 0; background: rgba(15,23,42,.65); backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; color: #fff; opacity: 0; pointer-events: none; transition: opacity .25s; }
   .loading-overlay.active { opacity: 1; pointer-events: all; }
-  .progress-ring { transform: rotate(-90deg); width: 80px; height: 80px; }
-  .progress-ring__circle {
-    stroke: #fff; stroke-width: 6; fill: transparent;
-    stroke-linecap: round; transition: stroke-dashoffset 0.2s;
-  }
-
-  /* Visibilidad Inicial */
+  .modal { position: fixed; inset: 0; background: rgba(15,23,42,.65); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 10000; opacity: 0; pointer-events: none; transition: opacity .25s; }
+  .modal.visible { opacity: 1; pointer-events: all; }
+  .modal-content { background: var(--bg-alt); color: var(--fg); padding: 32px; border-radius: var(--radius); box-shadow: var(--shadow); max-width: 500px; width: 90%; position: relative; transform: scale(0.95); transition: transform .25s; }
+  .modal.visible .modal-content { transform: scale(1); }
+  .modal-content h2 { margin-bottom: 16px; color: var(--primary); }
+  .modal-content ul { padding-left: 20px; color: var(--fg-muted); line-height: 1.7; }
+  .modal-content li { margin-bottom: 10px; }
+  .modal-close { position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--fg-muted); }
   .hidden { display: none !important; }
-
 </style>
 </head>
 <body>
 <div class="container">
 
   <section class="hero">
-    <div class="badge" data-i18n-key="badge">Fase Beta 1.0</div>
+    <div class="badge" data-i18n-key="badge">Fase Beta 2</div>
     <h1 data-i18n-key="heroTitle">Quita el fondo de tu firma en segundos</h1>
     <p data-i18n-key="heroSubtitle">Sube tu imagen, ajusta la tolerancia y el suavizado, y obtén una firma con fondo transparente lista para usar.</p>
     <div class="chips">
@@ -237,92 +210,71 @@
       <div class="chip" data-i18n-key="chipMulti">Multi-idioma y tema</div>
     </div>
   </section>
-
-  <div class="main-grid">
-    <div>
-      <section id="upload" class="upload-area">
+  
+  <section id="uploaderContainer">
+      <div id="upload" class="upload-area">
         <div class="upload-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line>
-          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
         </div>
         <h3 data-i18n-key="uploadTitle">Arrastra o selecciona tu imagen</h3>
         <p class="fg-muted" data-i18n-key="uploadHint">Tamaño máximo 10MB</p>
         <input type="file" id="fileInput" accept="image/*" hidden>
-      </section>
-
-      <section id="previewContainer" class="preview-wrap hidden">
-        <canvas id="resultCanvas"></canvas>
-      </section>
-
-      <div id="beforeAfterSwitch" class="switch-container justify-content-center hidden">
-        <label data-i18n-key="before">Antes</label>
-        <label class="switch">
-          <input type="checkbox" id="beforeAfterToggle" checked>
-          <span class="slider"></span>
-        </label>
-        <label data-i18n-key="after">Después</label>
       </div>
-    </div>
+  </section>
 
-    <div id="controlsCard" class="card controls-card hidden">
-        <div class="control">
-          <label for="tolerance"><span data-i18n-key="tolerance">Tolerancia</span><span id="tolVal">25</span></label>
-          <input type="range" id="tolerance" min="1" max="100" value="25">
+  <div id="editor" class="hidden">
+    <div class="editor-grid">
+      <div>
+        <section id="previewContainer" class="preview-wrap">
+          <canvas id="resultCanvas"></canvas>
+        </section>
+        <div id="beforeAfterSwitch" class="switch-container">
+          <label data-i18n-key="before">Antes</label>
+          <label class="switch"><input type="checkbox" id="beforeAfterToggle" checked><span class="slider"></span></label>
+          <label data-i18n-key="after">Después</label>
         </div>
-        <div class="control">
-          <label for="feather"><span data-i18n-key="feather">Suavizado</span><span id="featherVal">5</span></label>
-          <input type="range" id="feather" min="0" max="40" value="5">
-        </div>
-
-      <div class="actions">
-        <button id="downloadBtn" class="btn">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-          <span data-i18n-key="download">Descargar</span>
-        </button>
-        <button id="resetBtn" class="btn btn-secondary">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-          <span data-i18n-key="reset">Restaurar</span>
-        </button>
       </div>
-      <p class="hint" style="font-size: 0.9rem; color: var(--fg-muted); margin-top: 15px;"><i data-i18n-key="hintTip">Tip: usa imágenes con fondo uniforme y buena iluminación para mejores resultados.</i></p>
+      <div id="controlsCard" class="card controls-card">
+          <div class="control">
+            <label for="tolerance"><span data-i18n-key="tolerance">Tolerancia</span><span id="tolVal">25</span></label>
+            <input type="range" id="tolerance" min="1" max="100" value="25">
+          </div>
+          <div class="control">
+            <label for="feather"><span data-i18n-key="feather">Suavizado</span><span id="featherVal">5</span></label>
+            <input type="range" id="feather" min="0" max="40" value="5">
+          </div>
+          <div class="actions">
+              <button id="downloadBtn" class="btn" aria-label="Descargar imagen procesada">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span data-i18n-key="download">Descargar</span>
+              </button>
+              <button id="copyBtn" class="btn btn-secondary" aria-label="Copiar imagen al portapapeles">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                  <span data-i18n-key="copy">Copiar</span>
+              </button>
+              <button id="resetBtn" class="btn btn-secondary" aria-label="Restaurar valores por defecto">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                  <span data-i18n-key="reset">Restaurar</span>
+              </button>
+          </div>
+        <p class="hint" style="font-size: 0.9rem; color: var(--fg-muted); margin-top: 15px;"><i data-i18n-key="hintTip">Tip: usa imágenes con fondo uniforme y buena iluminación para mejores resultados.</i></p>
+      </div>
     </div>
   </div>
-
-  <section class="steps">
-    <div class="step-card">
-        <div class="step-icon">📂</div>
-        <h3 data-i18n-key="step1Title">1. Sube tu imagen</h3>
-        <p data-i18n-key="step1Desc">Elige un PNG o JPG con bordes claros entre el texto y el fondo.</p>
-    </div>
-    <div class="step-card">
-        <div class="step-icon">🎚️</div>
-        <h3 data-i18n-key="step2Title">2. Ajusta los parámetros</h3>
-        <p data-i18n-key="step2Desc">Modifica la tolerancia y el suavizado para un recorte perfecto.</p>
-    </div>
-    <div class="step-card">
-        <div class="step-icon">⬇️</div>
-        <h3 data-i18n-key="step3Title">3. Descarga y usa</h3>
-        <p data-i18n-key="step3Desc">Exporta como PNG transparente o copia al portapapeles para usar al instante.</p>
-    </div>
+  
+  <section id="historySection" class="history-section hidden">
+    <h2 data-i18n-key="historyTitle">Historial</h2>
+    <div id="historyContainer" class="history-container"></div>
   </section>
 
   <div class="main-grid">
-      <section id="privacy-policy" class="policy-section">
+      <section class="policy-section">
         <h2 data-i18n-key="privacyTitle">Política de Privacidad</h2>
-        <p data-i18n-key="privacyDesc1">
-          Esta aplicación procesa las imágenes únicamente en tu dispositivo. No se almacenan, comparten ni envían archivos a servidores externos. No recopilamos datos personales ni utilizamos tus imágenes para ningún propósito distinto al procesamiento solicitado por el usuario.
-        </p>
-        <p data-i18n-key="privacyDesc2">
-          Si tienes dudas sobre la privacidad, puedes contactarnos a través del correo <i>agente.chococreativo@gmail.com.</i>
-        </p>
+        <p data-i18n-key="privacyDesc1">Tus imágenes se procesan en tu dispositivo y nunca se suben a un servidor. El historial se guarda localmente en la base de datos de tu navegador. <br>Si tienes dudas sobre la privacidad, puedes contactarnos a través del correo <strong>agente.chococreativo@gmail.com.</strong></br></p>
       </section>
-
-      <section id="settings" class="policy-section">
+      <section class="policy-section">
         <h2 data-i18n-key="settingsTitle">Configuración</h2>
-        <p data-i18n-key="settingsDesc">
-          Este sitio no utiliza cookies de seguimiento. Cambia el idioma o el tema visual según tu preferencia.
-        </p>
+        <p data-i18n-key="settingsDesc">Este sitio no utiliza cookies de seguimiento. Cambia el idioma o el tema visual según tu preferencia.</p>
         <div class="switches">
           <button id="langSwitch" class="btn btn-secondary"></button>
           <button id="themeSwitch" class="btn btn-secondary"></button>
@@ -330,21 +282,40 @@
       </section>
   </div>
   
-  <footer>© 2025 by Kevin Hurtado. Fase beta. Todos los derechos reservados.</footer>
+  <footer>© 2025 by Kevin Hurtado. Todos los derechos reservados. <a href="#" id="versionLink">Novedades V2</a></footer>
 </div>
 
-<div id="loadingOverlay" class="loading-overlay">
-  <svg class="progress-ring"><circle class="progress-ring__circle" r="36" cx="40" cy="40"/></svg>
-  <div id="loadingText" style="margin-top:10px;" data-i18n-key="processing">Procesando...</div>
+<div id="loadingOverlay" class="loading-overlay" role="status" aria-live="polite">
+  <div id="loadingText" style="margin-bottom:10px;" data-i18n-key="processing">Procesando...</div>
+</div>
+
+<div id="versionModal" class="modal">
+  <div class="modal-content">
+    <button id="modalClose" class="modal-close" aria-label="Cerrar ventana">&times;</button>
+    <h2 data-i18n-key="versionTitle">Novedades en la Versión 2</h2>
+    <ul>
+      <li data-i18n-key="v2_feat5"><b>Historial Persistente:</b> ¡Las imágenes que descargas o copias se guardan automáticamente en un historial! Puedes recargarlas o eliminarlas cuando quieras.</li>
+      <li data-i18n-key="v2_feat6"><b>Cargador Siempre Activo:</b> El área para subir archivos ahora permanece visible en modo compacto para que puedas cargar una nueva imagen rápidamente.</li>
+      <li data-i18n-key="v2_feat1"><b>Rendimiento Mejorado:</b> El procesamiento de imágenes ahora es mucho más rápido y no congela la interfaz, gracias a la implementación de Web Workers.</li>
+    </ul>
+  </div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
+  // ======== CONSTANTES Y CONFIGURACIÓN ========
+  const DB_NAME = 'TransparentSignatureDB';
+  const DB_VERSION = 1;
+  const STORE_NAME = 'processedImages';
+  const DEFAULT_TOLERANCE = 25;
+  const DEFAULT_FEATHER = 5;
+  const DEBOUNCE_DELAY = 100;
+
   // ======== DICCIONARIO DE TRADUCCIONES ========
   const translations = {
     es: {
-      badge: "Fase Beta 1.0",
+      badge: "Fase Beta 2",
       heroTitle: "Quita el fondo de tu firma en segundos",
       heroSubtitle: "Sube tu imagen, ajusta la tolerancia y el suavizado, y obtén una firma con fondo transparente lista para usar.",
       chipFormats: "Formatos: PNG, JPG, WebP",
@@ -352,31 +323,25 @@ document.addEventListener('DOMContentLoaded', () => {
       chipMulti: "Multi-idioma y tema",
       uploadTitle: "Arrastra o selecciona tu imagen",
       uploadHint: "Tamaño máximo 10MB",
-      before: "Antes",
-      after: "Después",
-      tolerance: "Tolerancia",
-      feather: "Suavizado",
-      download: "Descargar",
-      reset: "Restaurar",
+      before: "Antes", after: "Después",
+      tolerance: "Tolerancia", feather: "Suavizado",
+      download: "Descargar", copy: "Copiar", copied: "¡Copiado!", reset: "Restaurar",
       hintTip: "Tip: usa imágenes con fondo uniforme y buena iluminación para mejores resultados.",
-      step1Title: "1. Sube tu imagen",
-      step1Desc: "Elige un PNG o JPG con bordes claros entre el texto y el fondo.",
-      step2Title: "2. Ajusta los parámetros",
-      step2Desc: "Modifica la tolerancia y el suavizado para un recorte perfecto.",
-      step3Title: "3. Descarga y usa",
-      step3Desc: "Exporta como PNG transparente o copia al portapapeles para usar al instante.",
       privacyTitle: "Política de Privacidad",
-      privacyDesc1: "Esta aplicación procesa las imágenes únicamente en tu dispositivo. No se almacenan, comparten ni envían archivos a servidores externos. No recopilamos datos personales ni utilizamos tus imágenes para ningún propósito distinto al procesamiento solicitado por el usuario.",
-      privacyDesc2: "Si tienes dudas sobre la privacidad, puedes contactarnos a través del correo <i>agente.chococreativo@gmail.com.</i>",
+      privacyDesc1: "Tus imágenes se procesan en tu dispositivo y nunca se suben a un servidor. El historial se guarda localmente en la base de datos de tu navegador. <br>Si tienes dudas sobre la privacidad, puedes contactarnos a través del correo <strong>agente.chococreativo@gmail.com.</strong></br>",
       settingsTitle: "Configuración",
       settingsDesc: "Este sitio no utiliza cookies de seguimiento. Cambia el idioma o el tema visual según tu preferencia.",
       langBtn: "🌐 English",
-      themeBtnDark: "🌙 Modo Oscuro",
-      themeBtnLight: "☀️ Modo Claro",
-      processing: "Procesando..."
+      themeBtnDark: "🌙 Modo Oscuro", themeBtnLight: "☀️ Modo Claro",
+      processing: "Procesando...",
+      historyTitle: "Historial",
+      versionTitle: "Novedades en la Versión 2",
+      v2_feat5: "<b>Historial Persistente:</b> ¡Las imágenes que descargas o copias se guardan automáticamente en un historial! Puedes recargarlas o eliminarlas cuando quieras.",
+      v2_feat6: "<b>Cargador Siempre Activo:</b> El área para subir archivos ahora permanece visible en modo compacto para que puedas cargar una nueva imagen rápidamente.",
+      v2_feat1: "<b>Rendimiento Mejorado:</b> El procesamiento de imágenes ahora es mucho más rápido y no congela la interfaz, gracias a la implementación de Web Workers.",
     },
     en: {
-      badge: "Beta Phase 1.0",
+      badge: "Beta Phase 2",
       heroTitle: "Remove your signature's background in seconds",
       heroSubtitle: "Upload your image, adjust tolerance and feather, and get a transparent background signature ready to use.",
       chipFormats: "Formats: PNG, JPG, WebP",
@@ -384,28 +349,22 @@ document.addEventListener('DOMContentLoaded', () => {
       chipMulti: "Multi-language & theme",
       uploadTitle: "Drag or select your image",
       uploadHint: "Maximum size 10MB",
-      before: "Before",
-      after: "After",
-      tolerance: "Tolerance",
-      feather: "Feather",
-      download: "Download",
-      reset: "Reset",
+      before: "Before", after: "After",
+      tolerance: "Tolerance", feather: "Feather",
+      download: "Download", copy: "Copy", copied: "Copied!", reset: "Reset",
       hintTip: "Tip: use images with a uniform background and good lighting for best results.",
-      step1Title: "1. Upload your image",
-      step1Desc: "Choose a PNG or JPG with clear edges between the text and background.",
-      step2Title: "2. Adjust parameters",
-      step2Desc: "Modify tolerance and feather for a perfect cutout.",
-      step3Title: "3. Download and use",
-      step3Desc: "Export as a transparent PNG or copy to the clipboard for instant use.",
       privacyTitle: "Privacy Policy",
-      privacyDesc1: "This application processes images solely on your device. No files are stored, shared, or sent to external servers. We do not collect personal data or use your images for any purpose other than the processing requested by the user.",
-      privacyDesc2: "If you have questions about privacy, you can contact us via email at <i>agente.chococreativo@gmail.com.</i>",
+      privacyDesc1: "Your images are processed on your device and never uploaded to a server. The history is saved locally in your browser's database. <br>If you have any questions about privacy, you can contact us at <strong>agente.chococreativo@gmail.com.</strong></br>",
       settingsTitle: "Settings",
       settingsDesc: "This site does not use tracking cookies. Change the language or visual theme according to your preference.",
       langBtn: "🌐 Español",
-      themeBtnDark: "🌙 Dark Mode",
-      themeBtnLight: "☀️ Light Mode",
-      processing: "Processing..."
+      themeBtnDark: "🌙 Dark Mode", themeBtnLight: "☀️ Light Mode",
+      processing: "Processing...",
+      historyTitle: "History",
+      versionTitle: "What's New in Version 2",
+      v2_feat5: "<b>Persistent History:</b> Images you download or copy are now automatically saved to a history! You can reload or delete them anytime.",
+      v2_feat6: "<b>Always-On Uploader:</b> The file upload area now stays visible in a compact mode so you can quickly load a new image.",
+      v2_feat1: "<b>Improved Performance:</b> Image processing is now much faster and doesn't freeze the UI, thanks to the implementation of Web Workers.",
     }
   };
 
@@ -414,21 +373,25 @@ document.addEventListener('DOMContentLoaded', () => {
   const UIElements = {
     uploadArea: getEl('upload'),
     fileInput: getEl('fileInput'),
-    previewContainer: getEl('previewContainer'),
+    editor: getEl('editor'),
     resultCanvas: getEl('resultCanvas'),
-    controlsCard: getEl('controlsCard'),
-    beforeAfterSwitch: getEl('beforeAfterSwitch'),
+    previewContainer: getEl('previewContainer'),
     beforeAfterToggle: getEl('beforeAfterToggle'),
     tolSlider: getEl('tolerance'),
     featherSlider: getEl('feather'),
     tolVal: getEl('tolVal'),
     featherVal: getEl('featherVal'),
     downloadBtn: getEl('downloadBtn'),
+    copyBtn: getEl('copyBtn'),
     resetBtn: getEl('resetBtn'),
     langSwitch: getEl('langSwitch'),
     themeSwitch: getEl('themeSwitch'),
     loadingOverlay: getEl('loadingOverlay'),
-    progressRing: document.querySelector('.progress-ring__circle'),
+    versionLink: getEl('versionLink'),
+    versionModal: getEl('versionModal'),
+    modalClose: getEl('modalClose'),
+    historySection: getEl('historySection'),
+    historyContainer: getEl('historyContainer'),
   };
 
   // ======== ESTADO DE LA APLICACIÓN ========
@@ -438,133 +401,124 @@ document.addEventListener('DOMContentLoaded', () => {
     originalCanvas: document.createElement('canvas'),
     currentLang: localStorage.getItem("lang") || "es",
     isDarkMode: localStorage.getItem("theme") === "dark",
+    isProcessing: false,
+    db: null,
   };
+  
+  // ======== LÓGICA DE BASE DE DATOS (IndexedDB) ========
+  const DB = {
+    init: () => new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, DB_VERSION);
+        request.onupgradeneeded = () => request.result.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+    }),
+    add: (data) => new Promise((resolve, reject) => {
+        const transaction = AppState.db.transaction(STORE_NAME, 'readwrite');
+        transaction.oncomplete = resolve;
+        transaction.onerror = () => reject(transaction.error);
+        transaction.objectStore(STORE_NAME).add({ dataUrl: data });
+    }),
+    getAll: () => new Promise((resolve, reject) => {
+        const transaction = AppState.db.transaction(STORE_NAME, 'readonly');
+        const request = transaction.objectStore(STORE_NAME).getAll();
+        request.onsuccess = () => resolve(request.result.reverse());
+        request.onerror = () => reject(request.error);
+    }),
+    delete: (id) => new Promise((resolve, reject) => {
+        const transaction = AppState.db.transaction(STORE_NAME, 'readwrite');
+        transaction.oncomplete = resolve;
+        transaction.onerror = () => reject(transaction.error);
+        transaction.objectStore(STORE_NAME).delete(id);
+    })
+  };
+  
+  // ======== WEB WORKER PARA PROCESAMIENTO DE IMAGEN ========
+  let imageWorker;
+  function initializeWorker() {
+    const workerCode = `
+      const rgbToLab = (r, g, b) => {
+          r /= 255; g /= 255; b /= 255;
+          r = r > 0.04045 ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
+          g = g > 0.04045 ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
+          b = b > 0.04045 ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
+          let x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
+          let y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.0000;
+          let z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
+          x = x > 0.008856 ? Math.pow(x, 1/3) : (7.787 * x) + 16/116;
+          y = y > 0.008856 ? Math.pow(y, 1/3) : (7.787 * y) + 16/116;
+          z = z > 0.008856 ? Math.pow(z, 1/3) : (7.787 * z) + 16/116;
+          return [(116 * y) - 16, 500 * (x - y), 200 * (y - z)];
+      };
+      const computeBackgroundColor = (d, w, h) => {
+          let r=0,g=0,b=0,count=0;
+          const step = Math.max(2, Math.floor(Math.min(w, h) / 100));
+          for (let y = 0; y < h; y += step) for (let x = 0; x < w; x += step) {
+              if (x > step && x < w - step && y > step && y < h - step) continue;
+              const i = (y * w + x) * 4; r += d[i]; g += d[i+1]; b += d[i+2]; count++;
+          }
+          return count === 0 ? [d[0], d[1], d[2]] : [Math.round(r/count), Math.round(g/count), Math.round(b/count)];
+      };
+      self.onmessage = (e) => {
+        const { imageData, w, h, tol, soft } = e.data;
+        const d = imageData.data;
+        const [bgR, bgG, bgB] = computeBackgroundColor(d, w, h);
+        const bgLab = rgbToLab(bgR, bgG, bgB);
+        const tolMin = Math.max(0, tol - soft);
+        const tolMax = tol + soft;
+        for (let i = 0; i < d.length; i += 4) {
+            const pxLab = rgbToLab(d[i], d[i+1], d[i+2]);
+            const deltaE = Math.hypot(pxLab[0] - bgLab[0], pxLab[1] - bgLab[1], pxLab[2] - bgLab[2]);
+            if (deltaE <= tolMin) d[i+3] = 0;
+            else if (soft > 0 && deltaE < tolMax) d[i+3] = Math.round(d[i+3] * ((deltaE - tolMin) / soft));
+        }
+        self.postMessage(imageData, [imageData.data.buffer]);
+      };
+    `;
+    const blob = new Blob([workerCode], { type: 'application/javascript' });
+    imageWorker = new Worker(URL.createObjectURL(blob));
+    imageWorker.onmessage = (e) => {
+        const processedImageData = e.data;
+        AppState.workCanvas.getContext('2d').putImageData(processedImageData, 0, 0);
+        drawProcessed();
+        AppState.isProcessing = false;
+        UIElements.loadingOverlay.classList.remove('active');
+    };
+  }
 
-  // ======== LÓGICA DE UI: IDIOMA Y TEMA ========
+  // ======== LÓGICA DE UI, DIBUJADO Y PROCESAMIENTO ========
   function applyLanguage(lang) {
     const t = translations[lang];
     document.querySelectorAll('[data-i18n-key]').forEach(el => {
       const key = el.getAttribute('data-i18n-key');
-      if (t[key]) {
-        el.innerHTML = t[key];
-      }
+      if (t[key]) el.innerHTML = t[key];
     });
     UIElements.langSwitch.textContent = t.langBtn;
-    updateThemeButtonText(); // Actualiza texto del botón de tema
+    UIElements.themeSwitch.textContent = AppState.isDarkMode ? t.themeBtnLight : t.themeBtnDark;
   }
-  
-  function updateThemeButtonText() {
-      const key = AppState.isDarkMode ? 'themeBtnLight' : 'themeBtnDark';
-      UIElements.themeSwitch.textContent = translations[AppState.currentLang][key];
-  }
-
   function applyTheme(isDark) {
     document.body.classList.toggle("dark", isDark);
-    updateThemeButtonText();
+    UIElements.themeSwitch.textContent = translations[AppState.currentLang][isDark ? 'themeBtnLight' : 'themeBtnDark'];
   }
-  
-  UIElements.langSwitch.addEventListener("click", () => {
-    AppState.currentLang = AppState.currentLang === "es" ? "en" : "es";
-    localStorage.setItem("lang", AppState.currentLang);
-    applyLanguage(AppState.currentLang);
-  });
-  
-  UIElements.themeSwitch.addEventListener("click", () => {
-    AppState.isDarkMode = !AppState.isDarkMode;
-    localStorage.setItem("theme", AppState.isDarkMode ? "dark" : "light");
-    applyTheme(AppState.isDarkMode);
-  });
-
-  // ======== LÓGICA DE CARGA (OVERLAY) ========
-  const radius = UIElements.progressRing.r.baseVal.value;
-  const circumference = 2 * Math.PI * radius;
-  UIElements.progressRing.style.strokeDasharray = `${circumference} ${circumference}`;
-  UIElements.progressRing.style.strokeDashoffset = circumference;
-
-  function setProgress(percent) {
-    const offset = circumference - (percent / 100) * circumference;
-    UIElements.progressRing.style.strokeDashoffset = offset;
+  function showEditorUI(show) {
+    UIElements.editor.classList.toggle('hidden', !show);
+    UIElements.uploadArea.classList.toggle('compact', show);
   }
-  
-  function showLoading(show) {
-    UIElements.loadingOverlay.classList.toggle('active', show);
-    if(show) setProgress(0);
-  }
-
-  // ======== LÓGICA DE PROCESAMIENTO DE IMAGEN ========
-  const rgbToLab = (r, g, b) => {
-      r /= 255; g /= 255; b /= 255;
-      r = r > 0.04045 ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
-      g = g > 0.04045 ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
-      b = b > 0.04045 ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
-      let x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
-      let y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.0000;
-      let z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
-      x = x > 0.008856 ? Math.pow(x, 1/3) : (7.787 * x) + 16/116;
-      y = y > 0.008856 ? Math.pow(y, 1/3) : (7.787 * y) + 16/116;
-      z = z > 0.008856 ? Math.pow(z, 1/3) : (7.787 * z) + 16/116;
-      return [(116 * y) - 16, 500 * (x - y), 200 * (y - z)];
-  };
-
-  const computeBackgroundColor = (imageData, w, h) => {
-      const d = imageData.data; let r=0,g=0,b=0,count=0;
-      const step = Math.max(2, Math.floor(Math.min(w, h) / 100));
-      for (let y = 0; y < h; y += step) {
-          for (let x = 0; x < w; x += step) {
-              if (x > step && x < w - step && y > step && y < h - step) continue;
-              const i = (y * w + x) * 4; r += d[i]; g += d[i+1]; b += d[i+2]; count++;
-          }
-      }
-      return count === 0 ? [d[0], d[1], d[2]] : [Math.round(r/count), Math.round(g/count), Math.round(b/count)];
-  };
-
   function processCurrentImage() {
-    if (!AppState.imgOriginal) return;
-
-    showLoading(true);
-    let progress = 0;
-    const interval = setInterval(() => { progress = Math.min(progress + 5, 90); setProgress(progress); }, 80);
-
-    // Usar requestAnimationFrame para no bloquear el hilo principal
-    requestAnimationFrame(async () => {
-        const ctx = AppState.workCanvas.getContext('2d', { willReadFrequently: true });
-        AppState.workCanvas.width = AppState.imgOriginal.naturalWidth;
-        AppState.workCanvas.height = AppState.imgOriginal.naturalHeight;
-        ctx.drawImage(AppState.imgOriginal, 0, 0);
-
-        const { width: w, height: h } = AppState.workCanvas;
-        const imageData = ctx.getImageData(0, 0, w, h);
-        const [bgR, bgG, bgB] = computeBackgroundColor(imageData, w, h);
-        const bgLab = rgbToLab(bgR, bgG, bgB);
-
-        const d = imageData.data;
-        const tol = parseInt(UIElements.tolSlider.value, 10);
-        const soft = parseInt(UIElements.featherSlider.value, 10);
-        const tolMin = Math.max(0, tol - soft);
-        const tolMax = tol + soft;
-
-        for (let i = 0; i < d.length; i += 4) {
-            const pxLab = rgbToLab(d[i], d[i+1], d[i+2]);
-            const deltaE = Math.hypot(pxLab[0] - bgLab[0], pxLab[1] - bgLab[1], pxLab[2] - bgLab[2]);
-            if (deltaE <= tolMin) {
-                d[i+3] = 0;
-            } else if (deltaE < tolMax) {
-                d[i+3] = Math.round(d[i+3] * ((deltaE - tolMin) / soft));
-            }
-        }
-        ctx.putImageData(imageData, 0, 0);
-
-        drawProcessed();
-        UIElements.beforeAfterToggle.checked = true; // Asegurarse de que el toggle muestre 'Después'
-        
-        clearInterval(interval);
-        setProgress(100);
-        await new Promise(resolve => setTimeout(resolve, 300));
-        showLoading(false);
-    });
+    if (!AppState.imgOriginal || AppState.isProcessing) return;
+    AppState.isProcessing = true;
+    UIElements.loadingOverlay.classList.add('active');
+    const ctx = AppState.workCanvas.getContext('2d', { willReadFrequently: true });
+    ctx.clearRect(0, 0, AppState.workCanvas.width, AppState.workCanvas.height);
+    ctx.drawImage(AppState.imgOriginal, 0, 0);
+    const imageData = ctx.getImageData(0, 0, AppState.workCanvas.width, AppState.workCanvas.height);
+    imageWorker.postMessage({
+        imageData: imageData,
+        w: AppState.workCanvas.width, h: AppState.workCanvas.height,
+        tol: parseInt(UIElements.tolSlider.value, 10),
+        soft: parseInt(UIElements.featherSlider.value, 10)
+    }, [imageData.data.buffer]);
   }
-
-  // ======== LÓGICA DE DIBUJADO Y MANEJO DE ARCHIVOS ========
   const drawProcessed = () => {
     UIElements.previewContainer.classList.remove('white-bg');
     const outCtx = UIElements.resultCanvas.getContext('2d');
@@ -573,7 +527,6 @@ document.addEventListener('DOMContentLoaded', () => {
     outCtx.clearRect(0, 0, AppState.workCanvas.width, AppState.workCanvas.height);
     outCtx.drawImage(AppState.workCanvas, 0, 0);
   };
-
   const drawOriginal = () => {
     UIElements.previewContainer.classList.add('white-bg');
     const outCtx = UIElements.resultCanvas.getContext('2d');
@@ -582,90 +535,111 @@ document.addEventListener('DOMContentLoaded', () => {
     outCtx.clearRect(0, 0, AppState.originalCanvas.width, AppState.originalCanvas.height);
     outCtx.drawImage(AppState.originalCanvas, 0, 0);
   };
-  
-  function showEditorUI(show) {
-      UIElements.uploadArea.classList.toggle('hidden', show);
-      UIElements.previewContainer.classList.toggle('hidden', !show);
-      UIElements.controlsCard.classList.toggle('hidden', !show);
-      UIElements.beforeAfterSwitch.classList.toggle('hidden', !show);
-  }
-
   function handleFile(file) {
-    if (!file.type.startsWith('image/')) return alert('Por favor, selecciona un archivo de imagen.');
-    if (file.size > 10 * 1024 * 1024) return alert('El archivo es demasiado grande (máx 10MB).');
-
-    showLoading(true);
+    if (!file || !file.type.startsWith('image/')) return;
+    loadImageOnCanvas(URL.createObjectURL(file));
+  }
+  function loadImageOnCanvas(imageSource) {
     const img = new Image();
     img.onload = () => {
-      AppState.imgOriginal = img;
-      AppState.originalCanvas.width = img.width;
-      AppState.originalCanvas.height = img.height;
-      AppState.originalCanvas.getContext('2d').drawImage(img, 0, 0);
-      
-      showEditorUI(true);
-      processCurrentImage();
+        AppState.imgOriginal = img;
+        const w = img.naturalWidth, h = img.naturalHeight;
+        AppState.originalCanvas.width = w; AppState.originalCanvas.height = h;
+        AppState.originalCanvas.getContext('2d').drawImage(img, 0, 0);
+        AppState.workCanvas.width = w; AppState.workCanvas.height = h;
+        showEditorUI(true);
+        UIElements.beforeAfterToggle.checked = true;
+        processCurrentImage();
     };
-    img.onerror = () => {
-        alert("No se pudo cargar la imagen. Intenta con otro archivo.");
-        showLoading(false);
-    }
-    img.src = URL.createObjectURL(file);
+    img.onerror = () => alert("No se pudo cargar la imagen.");
+    img.src = imageSource;
   }
+  async function loadAndRenderHistory() {
+      const images = await DB.getAll();
+      UIElements.historyContainer.innerHTML = '';
+      UIElements.historySection.classList.toggle('hidden', images.length === 0);
+      images.forEach(image => {
+          const item = document.createElement('div');
+          item.className = 'history-item';
+          item.innerHTML = `<img src="${image.dataUrl}" alt="Imagen procesada del historial" /><button class="history-delete" data-id="${image.id}" aria-label="Eliminar del historial">&times;</button>`;
+          UIElements.historyContainer.appendChild(item);
+      });
+  }
+  const debounce = (func, delay) => { let timeout; return (...args) => { clearTimeout(timeout); timeout = setTimeout(() => func(...args), delay); }; };
   
-  // ======== EVENT LISTENERS ========
-  UIElements.uploadArea.addEventListener('click', () => UIElements.fileInput.click());
-  UIElements.fileInput.addEventListener('change', e => { if(e.target.files[0]) handleFile(e.target.files[0]) });
-
-  // Drag & Drop
-  UIElements.uploadArea.addEventListener('dragover', e => { e.preventDefault(); UIElements.uploadArea.classList.add('dragover'); });
-  UIElements.uploadArea.addEventListener('dragleave', () => UIElements.uploadArea.classList.remove('dragover'));
-  UIElements.uploadArea.addEventListener('drop', e => {
-    e.preventDefault();
-    UIElements.uploadArea.classList.remove('dragover');
-    if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
-  });
-  
-  // Controles
-  const updateAndProcess = () => {
-    UIElements.tolVal.textContent = UIElements.tolSlider.value;
-    UIElements.featherVal.textContent = UIElements.featherSlider.value;
-    processCurrentImage();
-  };
-  UIElements.tolSlider.addEventListener('input', () => {
-      UIElements.tolVal.textContent = UIElements.tolSlider.value;
-  });
-  UIElements.tolSlider.addEventListener('change', processCurrentImage); // Procesa al soltar
-  UIElements.featherSlider.addEventListener('input', () => {
-      UIElements.featherVal.textContent = UIElements.featherSlider.value;
-  });
-  UIElements.featherSlider.addEventListener('change', processCurrentImage); // Procesa al soltar
-
-  UIElements.beforeAfterToggle.addEventListener('change', () => {
-    UIElements.beforeAfterToggle.checked ? drawProcessed() : drawOriginal();
-  });
-
-  UIElements.resetBtn.addEventListener('click', () => {
-    UIElements.tolSlider.value = 25;
-    UIElements.featherSlider.value = 5;
-    updateAndProcess();
-  });
-
-  UIElements.downloadBtn.addEventListener('click', () => {
-    const a = document.createElement('a');
-    a.download = 'firma_transparente.png';
-    a.href = UIElements.resultCanvas.toDataURL('image/png');
-    a.click();
-  });
-
-  function init() {
-    applyTheme(AppState.isDarkMode);
+  // ======== INICIALIZACIÓN Y EVENT LISTENERS ========
+  async function init() {
     applyLanguage(AppState.currentLang);
-    showEditorUI(false);
+    applyTheme(AppState.isDarkMode);
+    initializeWorker();
+    try {
+        AppState.db = await DB.init();
+        await loadAndRenderHistory();
+    } catch (error) {
+        console.error("No se pudo inicializar la base de datos:", error);
+    }
+    setupEventListeners();
   }
-  
+  function setupEventListeners(){
+    UIElements.uploadArea.addEventListener('click', () => UIElements.fileInput.click());
+    UIElements.fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
+    const dragEvents = ['dragover', 'dragleave', 'drop'];
+    dragEvents.forEach(eName => UIElements.uploadArea.addEventListener(eName, e => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (eName === 'dragover') UIElements.uploadArea.classList.add('dragover');
+        if (eName !== 'dragover') UIElements.uploadArea.classList.remove('dragover');
+        if (eName === 'drop') handleFile(e.dataTransfer.files[0]);
+    }));
+    const debouncedProcess = debounce(processCurrentImage, DEBOUNCE_DELAY);
+    UIElements.tolSlider.addEventListener('input', () => { UIElements.tolVal.textContent = UIElements.tolSlider.value; debouncedProcess(); });
+    UIElements.featherSlider.addEventListener('input', () => { UIElements.featherVal.textContent = UIElements.featherSlider.value; debouncedProcess(); });
+    UIElements.beforeAfterToggle.addEventListener('change', () => UIElements.beforeAfterToggle.checked ? drawProcessed() : drawOriginal());
+    UIElements.resetBtn.addEventListener('click', () => {
+      UIElements.tolSlider.value = DEFAULT_TOLERANCE; UIElements.featherSlider.value = DEFAULT_FEATHER;
+      UIElements.tolVal.textContent = DEFAULT_TOLERANCE; UIElements.featherVal.textContent = DEFAULT_FEATHER;
+      processCurrentImage();
+    });
+    const saveAndAction = async (action) => {
+        UIElements.copyBtn.disabled = true;
+        try { await DB.add(UIElements.resultCanvas.toDataURL('image/png')); await loadAndRenderHistory(); } catch(e) { console.error("Error al guardar en historial", e); }
+        action();
+    };
+    UIElements.downloadBtn.addEventListener('click', () => saveAndAction(() => {
+        const a = document.createElement('a');
+        a.download = 'firma_transparente.png';
+        a.href = UIElements.resultCanvas.toDataURL('image/png');
+        a.click();
+    }));
+    UIElements.copyBtn.addEventListener('click', () => saveAndAction(async () => {
+      const originalText = UIElements.copyBtn.querySelector('span').innerHTML;
+      UIElements.copyBtn.querySelector('span').textContent = translations[AppState.currentLang].copied;
+      try {
+        const blob = await new Promise(resolve => UIElements.resultCanvas.toBlob(resolve, 'image/png'));
+        await navigator.clipboard.write([ new ClipboardItem({ 'image/png': blob }) ]);
+      } catch (err) { alert('No se pudo copiar la imagen.'); } finally {
+        setTimeout(() => { UIElements.copyBtn.querySelector('span').innerHTML = originalText; UIElements.copyBtn.disabled = false; }, 2000);
+      }
+    }));
+    UIElements.historyContainer.addEventListener('click', e => {
+        if (e.target.tagName === 'IMG') {
+            loadImageOnCanvas(e.target.src);
+            window.scrollTo({ top: UIElements.editor.offsetTop, behavior: 'smooth' });
+        }
+        if (e.target.classList.contains('history-delete')) {
+            const id = parseInt(e.target.dataset.id, 10);
+            DB.delete(id).then(loadAndRenderHistory);
+        }
+    });
+    UIElements.langSwitch.addEventListener("click", () => { AppState.currentLang = AppState.currentLang === "es" ? "en" : "es"; localStorage.setItem("lang", AppState.currentLang); applyLanguage(AppState.currentLang); });
+    UIElements.themeSwitch.addEventListener("click", () => { AppState.isDarkMode = !AppState.isDarkMode; localStorage.setItem("theme", AppState.isDarkMode ? "dark" : "light"); applyTheme(AppState.isDarkMode); });
+    UIElements.versionLink.addEventListener('click', e => { e.preventDefault(); UIElements.versionModal.classList.add('visible'); });
+    UIElements.modalClose.addEventListener('click', () => UIElements.versionModal.classList.remove('visible'));
+    UIElements.versionModal.addEventListener('click', e => { if (e.target === UIElements.versionModal) UIElements.versionModal.classList.remove('visible'); });
+  }
+
   init();
 });
 </script>
 </body>
-
 </html>
