@@ -3,206 +3,34 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Firma Transparente | Beta 2</title>
-<link rel="icon" href="ico.png" type="image/x-icon">
+<title>Firma Transparente | Beta 3</title>
+<link rel="icon" href="img/ico.png" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #f8fafc;
-    --bg-alt: #ffffff;
-    --fg: #0f172a;
-    --fg-muted: #64748b;
-    --border: #e2e8f0;
-    --primary: #4f46e5;
-    --primary-hover: #4338ca;
-    --shadow-color: 220 4% 59%;
-    --shadow:
-      0 3.8px 2.2px hsl(var(--shadow-color) / 0.02),
-      0 9.2px 5.3px hsl(var(--shadow-color) / 0.028),
-      0 17.3px 10px hsl(var(--shadow-color) / 0.035),
-      0 30.8px 17.9px hsl(var(--shadow-color) / 0.042),
-      0 57.7px 33.4px hsl(var(--shadow-color) / 0.05),
-      0 138px 80px hsl(var(--shadow-color) / 0.07);
-    --radius: 16px;
-    --checker-a: #e5e7eb;
-    --checker-b: #ffffff;
-    --font-sans: 'Inter', system-ui, sans-serif;
-  }
-  body.dark {
-    --bg: #0f172a;
-    --bg-alt: #1e293b;
-    --fg: #f1f5f9;
-    --fg-muted: #94a3b8;
-    --border: #334155;
-    --primary: #818cf8;
-    --primary-hover: #a78bfa;
-    --shadow-color: 220 40% 2%;
-    --checker-a: #334155;
-    --checker-b: #1e293b;
-  }
-  body {
-    font-family: var(--font-sans);
-    background-color: var(--bg);
-    color: var(--fg);
-    margin: 0;
-    padding: 24px;
-    transition: background-color .25s, color .25s;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-  .container { max-width: 1100px; margin: auto; display: flex; flex-direction: column; gap: 24px; }
-  h1, h2, h3 { margin: 0; font-weight: 700; }
+<link rel="stylesheet" href="style.css">
 
-  /* Hero */
-  .hero {
-    text-align: center;
-    padding: 32px 24px;
-    background-color: var(--bg-alt);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-  }
-  .badge {
-    display: inline-block;
-    padding: 6px 14px;
-    font-size: .8rem;
-    font-weight: 700;
-    background: linear-gradient(90deg, var(--primary), #a855f7);
-    color: #fff;
-    border-radius: 999px;
-    margin-bottom: 16px;
-    letter-spacing: 0.5px;
-  }
-  .hero h1 { font-size: 2.2rem; margin: 0 0 12px 0; line-height: 1.2; }
-  .hero p { color: var(--fg-muted); margin-bottom: 24px; font-size: 1.1rem; max-width: 600px; margin-left: auto; margin-right: auto; }
-  .chips { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-  .chip {
-    padding: 8px 16px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    font-size: .85rem;
-    font-weight: 500;
-    transition: all .2s;
-  }
+<script 
+  src="https://www.paypal.com/sdk/js?client-id=BAAowbkGbCrbEnx8RrBHz8qELfBlAeQLKHQ0XBqpc1w2g0btRFSOg8iLhzqU6m2kAwiBtrKK1WRGCTNuco&components=hosted-buttons&disable-funding=venmo&currency=USD">
+</script>
 
-  /* Layout */
-  .editor-grid { display: grid; gap: 24px; }
-  @media(min-width: 900px) { .editor-grid { grid-template-columns: 1fr 1fr; } }
-  .card { background-color: var(--bg-alt); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); }
-
-  /* Área de Carga */
-  .upload-area {
-    border: 2px dashed var(--border);
-    padding: 40px;
-    border-radius: var(--radius);
-    text-align: center;
-    background-color: var(--bg);
-    cursor: pointer;
-    transition: all .25s ease-in-out;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-  }
-  .upload-area.compact {
-    padding: 16px;
-    flex-direction: row;
-    gap: 16px;
-  }
-  .upload-area.compact .upload-icon svg { width: 32px; height: 32px; }
-  .upload-area.compact .fg-muted { display: none; }
-  .upload-area:hover, .upload-area.dragover {
-    border-color: var(--primary);
-    background-color: var(--bg-alt);
-    transform: translateY(-4px);
-  }
-  .upload-area.dragover { box-shadow: 0 0 30px var(--primary); }
-  .upload-icon { color: var(--fg-muted); transition: all .2s; }
-  .upload-area:hover .upload-icon, .upload-area.dragover .upload-icon { color: var(--primary); }
-
-  /* Vista Previa */
-  .preview-wrap {
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    overflow: hidden;
-    display: grid;
-    place-items: center;
-    min-height: 280px;
-    background:
-      linear-gradient(45deg, var(--checker-a) 25%, transparent 25%),
-      linear-gradient(-45deg, var(--checker-a) 25%, transparent 25%),
-      linear-gradient(45deg, transparent 75%, var(--checker-a) 75%),
-      linear-gradient(-45deg, transparent 75%, var(--checker-a) 75%);
-    background-size: 24px 24px;
-    background-position: 0 0, 0 12px, 12px -12px, -12px 0;
-    transition: all .2s;
-  }
-  .preview-wrap.white-bg { background: #fff; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
-  canvas { max-width: 100%; height: auto; transition: all .3s; }
-
-  /* Controles y Botones */
-  .controls-card { display: flex; flex-direction: column; gap: 20px; }
-  .control label { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 500; }
-  input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 8px; background: var(--border); border-radius: 8px; outline: none; transition: all .2s; }
-  input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--primary); cursor: pointer; box-shadow: 0 0 0 3px var(--bg-alt), 0 0 0 5px var(--primary); }
-  .switch-container { display: flex; align-items: center; gap: 10px; margin-top: 16px; justify-content: center;}
-  .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
-  .switch input { opacity: 0; width: 0; height: 0; }
-  .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border); transition: .4s; border-radius: 26px; }
-  .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-  input:checked + .slider { background-color: var(--primary); }
-  input:checked + .slider:before { transform: translateX(24px); }
-  .actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
-  .btn { display: inline-flex; align-items: center; gap: 8px; border: none; padding: 12px 20px; border-radius: 999px; background: linear-gradient(90deg, var(--primary), #a855f7); color: #fff; font-weight: 700; cursor: pointer; box-shadow: var(--shadow); transition: all .2s; white-space: nowrap; }
-  .btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
-  .btn-secondary { background: var(--bg-alt); color: var(--fg); border: 1px solid var(--border); }
-  .btn-secondary:hover { background: var(--bg); border-color: var(--fg-muted); }
-  .btn:disabled { cursor: not-allowed; filter: grayscale(50%); opacity: 0.7; transform: none; }
-
-  /* Políticas y Configuración */
-  .main-grid { display: grid; gap: 24px; }
-  @media(min-width: 900px) { .main-grid { grid-template-columns: 1fr 1fr; } }
-  .policy-section { background-color: var(--bg-alt); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); }
-  .policy-section h2 { margin-bottom: 12px; }
-  .policy-section p { color: var(--fg-muted); line-height: 1.6; }
-  .policy-section p i { color: var(--primary); font-style: normal; }
-  .switches { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 24px; }
-  
-  /* Historial */
-  .history-section { background-color: var(--bg-alt); padding: 24px; border-radius: var(--radius); box-shadow: var(--shadow); }
-  .history-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; margin-top: 16px; }
-  .history-item { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-  .history-item img { display: block; width: 100%; height: 100%; object-fit: contain; background: linear-gradient(45deg, var(--checker-a) 25%, transparent 25%), linear-gradient(-45deg, var(--checker-a) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--checker-a) 75%), linear-gradient(-45deg, transparent 75%, var(--checker-a) 75%); background-size: 16px 16px; background-position: 0 0, 0 8px, 8px -8px, -8px 0; cursor: pointer; transition: transform .2s; }
-  .history-item:hover img { transform: scale(1.05); }
-  .history-delete { position: absolute; top: 4px; right: 4px; background: rgba(15, 23, 42, 0.7); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; opacity: 0; transition: opacity .2s; }
-  .history-item:hover .history-delete { opacity: 1; }
-
-  /* Footer y Overlays */
-  footer { text-align: center; color: var(--fg-muted); font-size: .9rem; margin-top: 32px; }
-  footer a { color: var(--primary); text-decoration: none; font-weight: 500; }
-  footer a:hover { text-decoration: underline; }
-  .loading-overlay { position: fixed; inset: 0; background: rgba(15,23,42,.65); backdrop-filter: blur(8px); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 9999; color: #fff; opacity: 0; pointer-events: none; transition: opacity .25s; }
-  .loading-overlay.active { opacity: 1; pointer-events: all; }
-  .modal { position: fixed; inset: 0; background: rgba(15,23,42,.65); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 10000; opacity: 0; pointer-events: none; transition: opacity .25s; }
-  .modal.visible { opacity: 1; pointer-events: all; }
-  .modal-content { background: var(--bg-alt); color: var(--fg); padding: 32px; border-radius: var(--radius); box-shadow: var(--shadow); max-width: 500px; width: 90%; position: relative; transform: scale(0.95); transition: transform .25s; }
-  .modal.visible .modal-content { transform: scale(1); }
-  .modal-content h2 { margin-bottom: 16px; color: var(--primary); }
-  .modal-content ul { padding-left: 20px; color: var(--fg-muted); line-height: 1.7; }
-  .modal-content li { margin-bottom: 10px; }
-  .modal-close { position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 24px; cursor: pointer; color: var(--fg-muted); }
-  .hidden { display: none !important; }
-</style>
 </head>
 <body>
 <div class="container">
+  
+  <header class="app-header">
+    <button id="langSwitch" class="icon-btn" aria-label="Cambiar idioma">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+    </button>
+    <button id="themeSwitch" class="icon-btn" aria-label="Cambiar tema">
+      <svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+      <svg id="moonIcon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+    </button>
+  </header>
 
   <section class="hero">
-    <div class="badge" data-i18n-key="badge">Fase Beta 2</div>
-    <h1 data-i18n-key="heroTitle">Quita el fondo de tu firma en segundos</h1>
+    <div class="badge" data-i18n-key="badge">Fase Beta 3</div>
+    <h1 data-i18n-key="heroTitle">Quita el fondo de firma en segundos</h1>
     <p data-i18n-key="heroSubtitle">Sube tu imagen, ajusta la tolerancia y el suavizado, y obtén una firma con fondo transparente lista para usar.</p>
     <div class="chips">
       <div class="chip" data-i18n-key="chipFormats">Formatos: PNG, JPG, WebP</div>
@@ -257,13 +85,28 @@
                   <span data-i18n-key="reset">Restaurar</span>
               </button>
           </div>
+          <div class="bg-controls">
+              <p data-i18n-key="background">Fondo de previsualización:</p>
+              <div id="bgSwatches" class="bg-swatches">
+                <button class="swatch active" data-bg="transparent" aria-label="Fondo transparente"></button>
+                <button class="swatch" data-bg="#ffffff" aria-label="Fondo blanco"></button>
+                <button class="swatch" data-bg="#000000" aria-label="Fondo negro"></button>
+                <button class="swatch" data-bg="#4338ca" aria-label="Fondo azul"></button>
+                <button class="swatch" data-bg="#fca5a5" aria-label="Fondo rosa"></button>
+                <button class="swatch" data-bg="#fde047" aria-label="Fondo amarillo"></button>
+                <button class="swatch" data-bg="gradient" aria-label="Fondo degradado"></button>
+              </div>
+          </div>
         <p class="hint" style="font-size: 0.9rem; color: var(--fg-muted); margin-top: 15px;"><i data-i18n-key="hintTip">Tip: usa imágenes con fondo uniforme y buena iluminación para mejores resultados.</i></p>
       </div>
     </div>
   </div>
   
   <section id="historySection" class="history-section hidden">
-    <h2 data-i18n-key="historyTitle">Historial</h2>
+    <div class="history-header">
+      <h2 data-i18n-key="historyTitle">Historial</h2>
+      <button id="clearHistoryBtn" class="btn btn-secondary hidden" data-i18n-key="clearHistory">Limpiar historial</button>
+    </div>
     <div id="historyContainer" class="history-container"></div>
   </section>
 
@@ -273,16 +116,17 @@
         <p data-i18n-key="privacyDesc1">Tus imágenes se procesan en tu dispositivo y nunca se suben a un servidor. El historial se guarda localmente en la base de datos de tu navegador. <br>Si tienes dudas sobre la privacidad, puedes contactarnos a través del correo <strong>agente.chococreativo@gmail.com.</strong></br></p>
       </section>
       <section class="policy-section">
-        <h2 data-i18n-key="settingsTitle">Configuración</h2>
-        <p data-i18n-key="settingsDesc">Este sitio no utiliza cookies de seguimiento. Cambia el idioma o el tema visual según tu preferencia.</p>
-        <div class="switches">
-          <button id="langSwitch" class="btn btn-secondary"></button>
-          <button id="themeSwitch" class="btn btn-secondary"></button>
-        </div>
+        <h2 data-i18n-key="howToTitle">Cómo Usar</h2>
+        <div id="howToContainer" class="how-to-steps">
+            </div>
       </section>
   </div>
   
-  <footer>© 2025 by Kevin Hurtado. Todos los derechos reservados. <a href="#" id="versionLink">Novedades V2</a></footer>
+  <footer>
+    <span>© 2025 by Kevin Hurtado. Todos los derechos reservados.</span>
+    <a href="#" id="versionLink">Novedades V3</a>
+    <a href="#" id="donateLink" data-i18n-key="donate">Donar con PayPal</a>
+  </footer>
 </div>
 
 <div id="loadingOverlay" class="loading-overlay" role="status" aria-live="polite">
@@ -292,7 +136,7 @@
 <div id="versionModal" class="modal">
   <div class="modal-content">
     <button id="modalClose" class="modal-close" aria-label="Cerrar ventana">&times;</button>
-    <h2 data-i18n-key="versionTitle">Novedades en la Versión 2</h2>
+    <h2 data-i18n-key="versionTitle">Novedades en la Versión 3</h2>
     <ul>
       <li data-i18n-key="v2_feat5"><b>Historial Persistente:</b> ¡Las imágenes que descargas o copias se guardan automáticamente en un historial! Puedes recargarlas o eliminarlas cuando quieras.</li>
       <li data-i18n-key="v2_feat6"><b>Cargador Siempre Activo:</b> El área para subir archivos ahora permanece visible en modo compacto para que puedas cargar una nueva imagen rápidamente.</li>
@@ -301,345 +145,21 @@
   </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
+<div id="donateModal" class="modal">
+    <div class="modal-content">
+        <button id="donateModalClose" class="modal-close" aria-label="Cerrar ventana">&times;</button>
+        <h2 data-i18n-key="donateTitle">Apoya este proyecto</h2>
+        <p data-i18n-key="donateDesc">Si esta herramienta te resulta útil, considera hacer una donación para apoyar su desarrollo y mantenimiento futuro.</p>
+        <div id="paypal-container-4KT9QGU5KM9FW"></div>
+	<script>
+  	paypal.HostedButtons({
+   	 hostedButtonId: "4KT9QGU5KM9FW",
+  	}).render("#paypal-container-4KT9QGU5KM9FW")
+	</script>
+        </div>
+    </div>
+</div>
 
-  // ======== CONSTANTES Y CONFIGURACIÓN ========
-  const DB_NAME = 'TransparentSignatureDB';
-  const DB_VERSION = 1;
-  const STORE_NAME = 'processedImages';
-  const DEFAULT_TOLERANCE = 25;
-  const DEFAULT_FEATHER = 5;
-  const DEBOUNCE_DELAY = 100;
-
-  // ======== DICCIONARIO DE TRADUCCIONES ========
-  const translations = {
-    es: {
-      badge: "Fase Beta 2",
-      heroTitle: "Quita el fondo de tu firma en segundos",
-      heroSubtitle: "Sube tu imagen, ajusta la tolerancia y el suavizado, y obtén una firma con fondo transparente lista para usar.",
-      chipFormats: "Formatos: PNG, JPG, WebP",
-      chipEasy: "Carga fácil por clic o arrastre",
-      chipMulti: "Multi-idioma y tema",
-      uploadTitle: "Arrastra o selecciona tu imagen",
-      uploadHint: "Tamaño máximo 10MB",
-      before: "Antes", after: "Después",
-      tolerance: "Tolerancia", feather: "Suavizado",
-      download: "Descargar", copy: "Copiar", copied: "¡Copiado!", reset: "Restaurar",
-      hintTip: "Tip: usa imágenes con fondo uniforme y buena iluminación para mejores resultados.",
-      privacyTitle: "Política de Privacidad",
-      privacyDesc1: "Tus imágenes se procesan en tu dispositivo y nunca se suben a un servidor. El historial se guarda localmente en la base de datos de tu navegador. <br>Si tienes dudas sobre la privacidad, puedes contactarnos a través del correo <strong>agente.chococreativo@gmail.com.</strong></br>",
-      settingsTitle: "Configuración",
-      settingsDesc: "Este sitio no utiliza cookies de seguimiento. Cambia el idioma o el tema visual según tu preferencia.",
-      langBtn: "🌐 English",
-      themeBtnDark: "🌙 Modo Oscuro", themeBtnLight: "☀️ Modo Claro",
-      processing: "Procesando...",
-      historyTitle: "Historial",
-      versionTitle: "Novedades en la Versión 2",
-      v2_feat5: "<b>Historial Persistente:</b> ¡Las imágenes que descargas o copias se guardan automáticamente en un historial! Puedes recargarlas o eliminarlas cuando quieras.",
-      v2_feat6: "<b>Cargador Siempre Activo:</b> El área para subir archivos ahora permanece visible en modo compacto para que puedas cargar una nueva imagen rápidamente.",
-      v2_feat1: "<b>Rendimiento Mejorado:</b> El procesamiento de imágenes ahora es mucho más rápido y no congela la interfaz, gracias a la implementación de Web Workers.",
-    },
-    en: {
-      badge: "Beta Phase 2",
-      heroTitle: "Remove your signature's background in seconds",
-      heroSubtitle: "Upload your image, adjust tolerance and feather, and get a transparent background signature ready to use.",
-      chipFormats: "Formats: PNG, JPG, WebP",
-      chipEasy: "Easy upload by click or drag",
-      chipMulti: "Multi-language & theme",
-      uploadTitle: "Drag or select your image",
-      uploadHint: "Maximum size 10MB",
-      before: "Before", after: "After",
-      tolerance: "Tolerance", feather: "Feather",
-      download: "Download", copy: "Copy", copied: "Copied!", reset: "Reset",
-      hintTip: "Tip: use images with a uniform background and good lighting for best results.",
-      privacyTitle: "Privacy Policy",
-      privacyDesc1: "Your images are processed on your device and never uploaded to a server. The history is saved locally in your browser's database. <br>If you have any questions about privacy, you can contact us at <strong>agente.chococreativo@gmail.com.</strong></br>",
-      settingsTitle: "Settings",
-      settingsDesc: "This site does not use tracking cookies. Change the language or visual theme according to your preference.",
-      langBtn: "🌐 Español",
-      themeBtnDark: "🌙 Dark Mode", themeBtnLight: "☀️ Light Mode",
-      processing: "Processing...",
-      historyTitle: "History",
-      versionTitle: "What's New in Version 2",
-      v2_feat5: "<b>Persistent History:</b> Images you download or copy are now automatically saved to a history! You can reload or delete them anytime.",
-      v2_feat6: "<b>Always-On Uploader:</b> The file upload area now stays visible in a compact mode so you can quickly load a new image.",
-      v2_feat1: "<b>Improved Performance:</b> Image processing is now much faster and doesn't freeze the UI, thanks to the implementation of Web Workers.",
-    }
-  };
-
-  // ======== ELEMENTOS DEL DOM ========
-  const getEl = (id) => document.getElementById(id);
-  const UIElements = {
-    uploadArea: getEl('upload'),
-    fileInput: getEl('fileInput'),
-    editor: getEl('editor'),
-    resultCanvas: getEl('resultCanvas'),
-    previewContainer: getEl('previewContainer'),
-    beforeAfterToggle: getEl('beforeAfterToggle'),
-    tolSlider: getEl('tolerance'),
-    featherSlider: getEl('feather'),
-    tolVal: getEl('tolVal'),
-    featherVal: getEl('featherVal'),
-    downloadBtn: getEl('downloadBtn'),
-    copyBtn: getEl('copyBtn'),
-    resetBtn: getEl('resetBtn'),
-    langSwitch: getEl('langSwitch'),
-    themeSwitch: getEl('themeSwitch'),
-    loadingOverlay: getEl('loadingOverlay'),
-    versionLink: getEl('versionLink'),
-    versionModal: getEl('versionModal'),
-    modalClose: getEl('modalClose'),
-    historySection: getEl('historySection'),
-    historyContainer: getEl('historyContainer'),
-  };
-
-  // ======== ESTADO DE LA APLICACIÓN ========
-  const AppState = {
-    imgOriginal: null,
-    workCanvas: document.createElement('canvas'),
-    originalCanvas: document.createElement('canvas'),
-    currentLang: localStorage.getItem("lang") || "es",
-    isDarkMode: localStorage.getItem("theme") === "dark",
-    isProcessing: false,
-    db: null,
-  };
-  
-  // ======== LÓGICA DE BASE DE DATOS (IndexedDB) ========
-  const DB = {
-    init: () => new Promise((resolve, reject) => {
-        const request = indexedDB.open(DB_NAME, DB_VERSION);
-        request.onupgradeneeded = () => request.result.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-    }),
-    add: (data) => new Promise((resolve, reject) => {
-        const transaction = AppState.db.transaction(STORE_NAME, 'readwrite');
-        transaction.oncomplete = resolve;
-        transaction.onerror = () => reject(transaction.error);
-        transaction.objectStore(STORE_NAME).add({ dataUrl: data });
-    }),
-    getAll: () => new Promise((resolve, reject) => {
-        const transaction = AppState.db.transaction(STORE_NAME, 'readonly');
-        const request = transaction.objectStore(STORE_NAME).getAll();
-        request.onsuccess = () => resolve(request.result.reverse());
-        request.onerror = () => reject(request.error);
-    }),
-    delete: (id) => new Promise((resolve, reject) => {
-        const transaction = AppState.db.transaction(STORE_NAME, 'readwrite');
-        transaction.oncomplete = resolve;
-        transaction.onerror = () => reject(transaction.error);
-        transaction.objectStore(STORE_NAME).delete(id);
-    })
-  };
-  
-  // ======== WEB WORKER PARA PROCESAMIENTO DE IMAGEN ========
-  let imageWorker;
-  function initializeWorker() {
-    const workerCode = `
-      const rgbToLab = (r, g, b) => {
-          r /= 255; g /= 255; b /= 255;
-          r = r > 0.04045 ? Math.pow((r + 0.055) / 1.055, 2.4) : r / 12.92;
-          g = g > 0.04045 ? Math.pow((g + 0.055) / 1.055, 2.4) : g / 12.92;
-          b = b > 0.04045 ? Math.pow((b + 0.055) / 1.055, 2.4) : b / 12.92;
-          let x = (r * 0.4124 + g * 0.3576 + b * 0.1805) / 0.95047;
-          let y = (r * 0.2126 + g * 0.7152 + b * 0.0722) / 1.0000;
-          let z = (r * 0.0193 + g * 0.1192 + b * 0.9505) / 1.08883;
-          x = x > 0.008856 ? Math.pow(x, 1/3) : (7.787 * x) + 16/116;
-          y = y > 0.008856 ? Math.pow(y, 1/3) : (7.787 * y) + 16/116;
-          z = z > 0.008856 ? Math.pow(z, 1/3) : (7.787 * z) + 16/116;
-          return [(116 * y) - 16, 500 * (x - y), 200 * (y - z)];
-      };
-      const computeBackgroundColor = (d, w, h) => {
-          let r=0,g=0,b=0,count=0;
-          const step = Math.max(2, Math.floor(Math.min(w, h) / 100));
-          for (let y = 0; y < h; y += step) for (let x = 0; x < w; x += step) {
-              if (x > step && x < w - step && y > step && y < h - step) continue;
-              const i = (y * w + x) * 4; r += d[i]; g += d[i+1]; b += d[i+2]; count++;
-          }
-          return count === 0 ? [d[0], d[1], d[2]] : [Math.round(r/count), Math.round(g/count), Math.round(b/count)];
-      };
-      self.onmessage = (e) => {
-        const { imageData, w, h, tol, soft } = e.data;
-        const d = imageData.data;
-        const [bgR, bgG, bgB] = computeBackgroundColor(d, w, h);
-        const bgLab = rgbToLab(bgR, bgG, bgB);
-        const tolMin = Math.max(0, tol - soft);
-        const tolMax = tol + soft;
-        for (let i = 0; i < d.length; i += 4) {
-            const pxLab = rgbToLab(d[i], d[i+1], d[i+2]);
-            const deltaE = Math.hypot(pxLab[0] - bgLab[0], pxLab[1] - bgLab[1], pxLab[2] - bgLab[2]);
-            if (deltaE <= tolMin) d[i+3] = 0;
-            else if (soft > 0 && deltaE < tolMax) d[i+3] = Math.round(d[i+3] * ((deltaE - tolMin) / soft));
-        }
-        self.postMessage(imageData, [imageData.data.buffer]);
-      };
-    `;
-    const blob = new Blob([workerCode], { type: 'application/javascript' });
-    imageWorker = new Worker(URL.createObjectURL(blob));
-    imageWorker.onmessage = (e) => {
-        const processedImageData = e.data;
-        AppState.workCanvas.getContext('2d').putImageData(processedImageData, 0, 0);
-        drawProcessed();
-        AppState.isProcessing = false;
-        UIElements.loadingOverlay.classList.remove('active');
-    };
-  }
-
-  // ======== LÓGICA DE UI, DIBUJADO Y PROCESAMIENTO ========
-  function applyLanguage(lang) {
-    const t = translations[lang];
-    document.querySelectorAll('[data-i18n-key]').forEach(el => {
-      const key = el.getAttribute('data-i18n-key');
-      if (t[key]) el.innerHTML = t[key];
-    });
-    UIElements.langSwitch.textContent = t.langBtn;
-    UIElements.themeSwitch.textContent = AppState.isDarkMode ? t.themeBtnLight : t.themeBtnDark;
-  }
-  function applyTheme(isDark) {
-    document.body.classList.toggle("dark", isDark);
-    UIElements.themeSwitch.textContent = translations[AppState.currentLang][isDark ? 'themeBtnLight' : 'themeBtnDark'];
-  }
-  function showEditorUI(show) {
-    UIElements.editor.classList.toggle('hidden', !show);
-    UIElements.uploadArea.classList.toggle('compact', show);
-  }
-  function processCurrentImage() {
-    if (!AppState.imgOriginal || AppState.isProcessing) return;
-    AppState.isProcessing = true;
-    UIElements.loadingOverlay.classList.add('active');
-    const ctx = AppState.workCanvas.getContext('2d', { willReadFrequently: true });
-    ctx.clearRect(0, 0, AppState.workCanvas.width, AppState.workCanvas.height);
-    ctx.drawImage(AppState.imgOriginal, 0, 0);
-    const imageData = ctx.getImageData(0, 0, AppState.workCanvas.width, AppState.workCanvas.height);
-    imageWorker.postMessage({
-        imageData: imageData,
-        w: AppState.workCanvas.width, h: AppState.workCanvas.height,
-        tol: parseInt(UIElements.tolSlider.value, 10),
-        soft: parseInt(UIElements.featherSlider.value, 10)
-    }, [imageData.data.buffer]);
-  }
-  const drawProcessed = () => {
-    UIElements.previewContainer.classList.remove('white-bg');
-    const outCtx = UIElements.resultCanvas.getContext('2d');
-    UIElements.resultCanvas.width = AppState.workCanvas.width;
-    UIElements.resultCanvas.height = AppState.workCanvas.height;
-    outCtx.clearRect(0, 0, AppState.workCanvas.width, AppState.workCanvas.height);
-    outCtx.drawImage(AppState.workCanvas, 0, 0);
-  };
-  const drawOriginal = () => {
-    UIElements.previewContainer.classList.add('white-bg');
-    const outCtx = UIElements.resultCanvas.getContext('2d');
-    UIElements.resultCanvas.width = AppState.originalCanvas.width;
-    UIElements.resultCanvas.height = AppState.originalCanvas.height;
-    outCtx.clearRect(0, 0, AppState.originalCanvas.width, AppState.originalCanvas.height);
-    outCtx.drawImage(AppState.originalCanvas, 0, 0);
-  };
-  function handleFile(file) {
-    if (!file || !file.type.startsWith('image/')) return;
-    loadImageOnCanvas(URL.createObjectURL(file));
-  }
-  function loadImageOnCanvas(imageSource) {
-    const img = new Image();
-    img.onload = () => {
-        AppState.imgOriginal = img;
-        const w = img.naturalWidth, h = img.naturalHeight;
-        AppState.originalCanvas.width = w; AppState.originalCanvas.height = h;
-        AppState.originalCanvas.getContext('2d').drawImage(img, 0, 0);
-        AppState.workCanvas.width = w; AppState.workCanvas.height = h;
-        showEditorUI(true);
-        UIElements.beforeAfterToggle.checked = true;
-        processCurrentImage();
-    };
-    img.onerror = () => alert("No se pudo cargar la imagen.");
-    img.src = imageSource;
-  }
-  async function loadAndRenderHistory() {
-      const images = await DB.getAll();
-      UIElements.historyContainer.innerHTML = '';
-      UIElements.historySection.classList.toggle('hidden', images.length === 0);
-      images.forEach(image => {
-          const item = document.createElement('div');
-          item.className = 'history-item';
-          item.innerHTML = `<img src="${image.dataUrl}" alt="Imagen procesada del historial" /><button class="history-delete" data-id="${image.id}" aria-label="Eliminar del historial">&times;</button>`;
-          UIElements.historyContainer.appendChild(item);
-      });
-  }
-  const debounce = (func, delay) => { let timeout; return (...args) => { clearTimeout(timeout); timeout = setTimeout(() => func(...args), delay); }; };
-  
-  // ======== INICIALIZACIÓN Y EVENT LISTENERS ========
-  async function init() {
-    applyLanguage(AppState.currentLang);
-    applyTheme(AppState.isDarkMode);
-    initializeWorker();
-    try {
-        AppState.db = await DB.init();
-        await loadAndRenderHistory();
-    } catch (error) {
-        console.error("No se pudo inicializar la base de datos:", error);
-    }
-    setupEventListeners();
-  }
-  function setupEventListeners(){
-    UIElements.uploadArea.addEventListener('click', () => UIElements.fileInput.click());
-    UIElements.fileInput.addEventListener('change', e => handleFile(e.target.files[0]));
-    const dragEvents = ['dragover', 'dragleave', 'drop'];
-    dragEvents.forEach(eName => UIElements.uploadArea.addEventListener(eName, e => {
-        e.preventDefault();
-        e.stopPropagation();
-        if (eName === 'dragover') UIElements.uploadArea.classList.add('dragover');
-        if (eName !== 'dragover') UIElements.uploadArea.classList.remove('dragover');
-        if (eName === 'drop') handleFile(e.dataTransfer.files[0]);
-    }));
-    const debouncedProcess = debounce(processCurrentImage, DEBOUNCE_DELAY);
-    UIElements.tolSlider.addEventListener('input', () => { UIElements.tolVal.textContent = UIElements.tolSlider.value; debouncedProcess(); });
-    UIElements.featherSlider.addEventListener('input', () => { UIElements.featherVal.textContent = UIElements.featherSlider.value; debouncedProcess(); });
-    UIElements.beforeAfterToggle.addEventListener('change', () => UIElements.beforeAfterToggle.checked ? drawProcessed() : drawOriginal());
-    UIElements.resetBtn.addEventListener('click', () => {
-      UIElements.tolSlider.value = DEFAULT_TOLERANCE; UIElements.featherSlider.value = DEFAULT_FEATHER;
-      UIElements.tolVal.textContent = DEFAULT_TOLERANCE; UIElements.featherVal.textContent = DEFAULT_FEATHER;
-      processCurrentImage();
-    });
-    const saveAndAction = async (action) => {
-        UIElements.copyBtn.disabled = true;
-        try { await DB.add(UIElements.resultCanvas.toDataURL('image/png')); await loadAndRenderHistory(); } catch(e) { console.error("Error al guardar en historial", e); }
-        action();
-    };
-    UIElements.downloadBtn.addEventListener('click', () => saveAndAction(() => {
-        const a = document.createElement('a');
-        a.download = 'firma_transparente.png';
-        a.href = UIElements.resultCanvas.toDataURL('image/png');
-        a.click();
-    }));
-    UIElements.copyBtn.addEventListener('click', () => saveAndAction(async () => {
-      const originalText = UIElements.copyBtn.querySelector('span').innerHTML;
-      UIElements.copyBtn.querySelector('span').textContent = translations[AppState.currentLang].copied;
-      try {
-        const blob = await new Promise(resolve => UIElements.resultCanvas.toBlob(resolve, 'image/png'));
-        await navigator.clipboard.write([ new ClipboardItem({ 'image/png': blob }) ]);
-      } catch (err) { alert('No se pudo copiar la imagen.'); } finally {
-        setTimeout(() => { UIElements.copyBtn.querySelector('span').innerHTML = originalText; UIElements.copyBtn.disabled = false; }, 2000);
-      }
-    }));
-    UIElements.historyContainer.addEventListener('click', e => {
-        if (e.target.tagName === 'IMG') {
-            loadImageOnCanvas(e.target.src);
-            window.scrollTo({ top: UIElements.editor.offsetTop, behavior: 'smooth' });
-        }
-        if (e.target.classList.contains('history-delete')) {
-            const id = parseInt(e.target.dataset.id, 10);
-            DB.delete(id).then(loadAndRenderHistory);
-        }
-    });
-    UIElements.langSwitch.addEventListener("click", () => { AppState.currentLang = AppState.currentLang === "es" ? "en" : "es"; localStorage.setItem("lang", AppState.currentLang); applyLanguage(AppState.currentLang); });
-    UIElements.themeSwitch.addEventListener("click", () => { AppState.isDarkMode = !AppState.isDarkMode; localStorage.setItem("theme", AppState.isDarkMode ? "dark" : "light"); applyTheme(AppState.isDarkMode); });
-    UIElements.versionLink.addEventListener('click', e => { e.preventDefault(); UIElements.versionModal.classList.add('visible'); });
-    UIElements.modalClose.addEventListener('click', () => UIElements.versionModal.classList.remove('visible'));
-    UIElements.versionModal.addEventListener('click', e => { if (e.target === UIElements.versionModal) UIElements.versionModal.classList.remove('visible'); });
-  }
-
-  init();
-});
-</script>
+<script src="script.js"></script>
 </body>
 </html>
