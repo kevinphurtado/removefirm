@@ -1,4 +1,4 @@
-# ✍️Firma Transparente v2 (Beta)
+# ✍️Firma Transparente v3 (Beta)
 
 [![Estado del Proyecto](https://img.shields.io/badge/estado-Beta-green)](https://github.com/KevinHurtado)
 [![Tecnología](https://img.shields.io/badge/tech-Vanilla_JS-yellow)](https://developer.mozilla.org/es/docs/Web/JavaScript)
