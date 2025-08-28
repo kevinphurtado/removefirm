@@ -3,8 +3,20 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Firma Transparente | Beta 3</title>
-<link rel="icon" href="img/ico.png" type="image/x-icon">
+
+<title>Firma Transparente - Elimina el Fondo de tu Firma Online</title>
+<meta name="description" content="Herramienta online gratuita para quitar el fondo de tu firma en segundos. Sube tu imagen, ajusta la tolerancia y obtén una firma con fondo transparente. 100% privado y procesado en tu navegador." />
+<meta name="keywords" content="firma transparente, eliminar fondo, quitar fondo de firma, fondo transparente online, creador de firma png, herramienta firma digital, editor de imagenes online" />
+<meta name="author" content="Kevin Hurtado">
+<link rel="canonical" href="https://removebeta.site" /> <meta property="og:title" content="Firma Transparente - Elimina el Fondo de tu Firma Online" />
+<meta property="og:description" content="Herramienta online gratuita para quitar el fondo de tu firma en segundos. Sube tu imagen y obtén una firma con fondo transparente." />
+<meta property="og:image" content="https://removebeta.site/img/ico.png" /> <meta property="og:url" content="https://removebeta.site" /> <meta property="og:type" content="website" />
+<meta property="og:locale" content="es_ES" />
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Firma Transparente - Elimina el Fondo de tu Firma Online">
+<meta name="twitter:description" content="Herramienta online gratuita para quitar el fondo de tu firma en segundos. Sube tu imagen y obtén una firma con fondo transparente.">
+<meta name="twitter:image" content="https://removebeta.site/img/ico.png"> <link rel="icon" href="img/ico.png" type="image/x-icon">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
@@ -12,6 +24,22 @@
 
 <script 
   src="https://www.paypal.com/sdk/js?client-id=BAAowbkGbCrbEnx8RrBHz8qELfBlAeQLKHQ0XBqpc1w2g0btRFSOg8iLhzqU6m2kAwiBtrKK1WRGCTNuco&components=hosted-buttons&disable-funding=venmo&currency=USD">
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Firma Transparente",
+  "description": "Herramienta web simple, rápida y privada para eliminar el fondo de firmas o cualquier imagen con fondo uniforme, directamente en tu navegador.",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires HTML5 support",
+  "url": "https://https://removebeta.site",  "offers": {
+    "@type": "Offer",
+    "price": "0"
+  }
+}
 </script>
 
 </head>
@@ -28,101 +56,100 @@
     </button>
   </header>
 
-  <section class="hero">
-    <div class="badge" data-i18n-key="badge">Fase Beta 3</div>
-    <h1 data-i18n-key="heroTitle">Quita el fondo de firma en segundos</h1>
-    <p data-i18n-key="heroSubtitle">Sube tu imagen, ajusta la tolerancia y el suavizado, y obtén una firma con fondo transparente lista para usar.</p>
-    <div class="chips">
-      <div class="chip" data-i18n-key="chipFormats">Formatos: PNG, JPG, WebP</div>
-      <div class="chip" data-i18n-key="chipEasy">Carga fácil por clic o arrastre</div>
-      <div class="chip" data-i18n-key="chipMulti">Multi-idioma y tema</div>
-    </div>
-  </section>
-  
-  <section id="uploaderContainer">
-      <div id="upload" class="upload-area">
-        <div class="upload-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+  <main> <section class="hero">
+      <div class="badge" data-i18n-key="badge">Fase Beta 3</div>
+      <h1 data-i18n-key="heroTitle">Quita el fondo de tu firma en segundos</h1>
+      <p data-i18n-key="heroSubtitle">Sube tu imagen, ajusta la tolerancia y el suavizado, y obtén una firma con fondo transparente lista para usar.</p>
+      <div class="chips">
+        <div class="chip" data-i18n-key="chipFormats">Formatos: PNG, JPG, WebP</div>
+        <div class="chip" data-i18n-key="chipEasy">Carga fácil por clic o arrastre</div>
+        <div class="chip" data-i18n-key="chipMulti">Multi-idioma y tema</div>
+      </div>
+    </section>
+    
+    <section id="uploaderContainer">
+        <div id="upload" class="upload-area">
+          <div class="upload-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          </div>
+          <h3 data-i18n-key="uploadTitle">Arrastra o selecciona tu imagen</h3>
+          <p class="fg-muted" data-i18n-key="uploadHint">Tamaño máximo 10MB</p>
+          <input type="file" id="fileInput" accept="image/*" hidden>
         </div>
-        <h3 data-i18n-key="uploadTitle">Arrastra o selecciona tu imagen</h3>
-        <p class="fg-muted" data-i18n-key="uploadHint">Tamaño máximo 10MB</p>
-        <input type="file" id="fileInput" accept="image/*" hidden>
-      </div>
-  </section>
+    </section>
 
-  <div id="editor" class="hidden">
-    <div class="editor-grid">
-      <div>
-        <section id="previewContainer" class="preview-wrap">
-          <canvas id="resultCanvas"></canvas>
-        </section>
-        <div id="beforeAfterSwitch" class="switch-container">
-          <label data-i18n-key="before">Antes</label>
-          <label class="switch"><input type="checkbox" id="beforeAfterToggle" checked><span class="slider"></span></label>
-          <label data-i18n-key="after">Después</label>
+    <div id="editor" class="hidden">
+      <div class="editor-grid">
+        <div>
+          <section id="previewContainer" class="preview-wrap">
+            <canvas id="resultCanvas"></canvas>
+          </section>
+          <div id="beforeAfterSwitch" class="switch-container">
+            <label data-i18n-key="before">Antes</label>
+            <label class="switch"><input type="checkbox" id="beforeAfterToggle" checked><span class="slider"></span></label>
+            <label data-i18n-key="after">Después</label>
+          </div>
         </div>
-      </div>
-      <div id="controlsCard" class="card controls-card">
-          <div class="control">
-            <label for="tolerance"><span data-i18n-key="tolerance">Tolerancia</span><span id="tolVal">25</span></label>
-            <input type="range" id="tolerance" min="1" max="100" value="25">
-          </div>
-          <div class="control">
-            <label for="feather"><span data-i18n-key="feather">Suavizado</span><span id="featherVal">5</span></label>
-            <input type="range" id="feather" min="0" max="40" value="5">
-          </div>
-          <div class="actions">
-              <button id="downloadBtn" class="btn" aria-label="Descargar imagen procesada">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                <span data-i18n-key="download">Descargar</span>
-              </button>
-              <button id="copyBtn" class="btn btn-secondary" aria-label="Copiar imagen al portapapeles">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                  <span data-i18n-key="copy">Copiar</span>
-              </button>
-              <button id="resetBtn" class="btn btn-secondary" aria-label="Restaurar valores por defecto">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
-                  <span data-i18n-key="reset">Restaurar</span>
-              </button>
-          </div>
-          <div class="bg-controls">
-              <p data-i18n-key="background">Fondo de previsualización:</p>
-              <div id="bgSwatches" class="bg-swatches">
-                <button class="swatch active" data-bg="transparent" aria-label="Fondo transparente"></button>
-                <button class="swatch" data-bg="#ffffff" aria-label="Fondo blanco"></button>
-                <button class="swatch" data-bg="#000000" aria-label="Fondo negro"></button>
-                <button class="swatch" data-bg="#4338ca" aria-label="Fondo azul"></button>
-                <button class="swatch" data-bg="#fca5a5" aria-label="Fondo rosa"></button>
-                <button class="swatch" data-bg="#fde047" aria-label="Fondo amarillo"></button>
-                <button class="swatch" data-bg="gradient" aria-label="Fondo degradado"></button>
-              </div>
-          </div>
-        <p class="hint" style="font-size: 0.9rem; color: var(--fg-muted); margin-top: 15px;"><i data-i18n-key="hintTip">Tip: usa imágenes con fondo uniforme y buena iluminación para mejores resultados.</i></p>
-      </div>
-    </div>
-  </div>
-  
-  <section id="historySection" class="history-section hidden">
-    <div class="history-header">
-      <h2 data-i18n-key="historyTitle">Historial</h2>
-      <button id="clearHistoryBtn" class="btn btn-secondary hidden" data-i18n-key="clearHistory">Limpiar historial</button>
-    </div>
-    <div id="historyContainer" class="history-container"></div>
-  </section>
-
-  <div class="main-grid">
-      <section class="policy-section">
-        <h2 data-i18n-key="privacyTitle">Política de Privacidad</h2>
-        <p data-i18n-key="privacyDesc1">Tus imágenes se procesan en tu dispositivo y nunca se suben a un servidor. El historial se guarda localmente en la base de datos de tu navegador. <br>Si tienes dudas sobre la privacidad, puedes consultar nuestra política completa en el siguiente <a href="https://chococreativo.com.co/politica-privacidad">enlace</a>.</br></p>
-      </section>
-      <section class="policy-section">
-        <h2 data-i18n-key="howToTitle">Cómo Usar</h2>
-        <div id="howToContainer" class="how-to-steps">
+        <div id="controlsCard" class="card controls-card">
+            <div class="control">
+              <label for="tolerance"><span data-i18n-key="tolerance">Tolerancia</span><span id="tolVal">25</span></label>
+              <input type="range" id="tolerance" min="1" max="100" value="25">
             </div>
-      </section>
-  </div>
-  
-  <footer>
+            <div class="control">
+              <label for="feather"><span data-i18n-key="feather">Suavizado</span><span id="featherVal">5</span></label>
+              <input type="range" id="feather" min="0" max="40" value="5">
+            </div>
+            <div class="actions">
+                <button id="downloadBtn" class="btn" aria-label="Descargar imagen procesada">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  <span data-i18n-key="download">Descargar</span>
+                </button>
+                <button id="copyBtn" class="btn btn-secondary" aria-label="Copiar imagen al portapapeles">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    <span data-i18n-key="copy">Copiar</span>
+                </button>
+                <button id="resetBtn" class="btn btn-secondary" aria-label="Restaurar valores por defecto">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                    <span data-i18n-key="reset">Restaurar</span>
+                </button>
+            </div>
+            <div class="bg-controls">
+                <p data-i18n-key="background">Fondo de previsualización:</p>
+                <div id="bgSwatches" class="bg-swatches">
+                  <button class="swatch active" data-bg="transparent" aria-label="Fondo transparente"></button>
+                  <button class="swatch" data-bg="#ffffff" aria-label="Fondo blanco"></button>
+                  <button class="swatch" data-bg="#000000" aria-label="Fondo negro"></button>
+                  <button class="swatch" data-bg="#4338ca" aria-label="Fondo azul"></button>
+                  <button class="swatch" data-bg="#fca5a5" aria-label="Fondo rosa"></button>
+                  <button class="swatch" data-bg="#fde047" aria-label="Fondo amarillo"></button>
+                  <button class="swatch" data-bg="gradient" aria-label="Fondo degradado"></button>
+                </div>
+            </div>
+          <p class="hint" style="font-size: 0.9rem; color: var(--fg-muted); margin-top: 15px;"><i data-i18n-key="hintTip">Tip: usa imágenes con fondo uniforme y buena iluminación para mejores resultados.</i></p>
+        </div>
+      </div>
+    </div>
+    
+    <section id="historySection" class="history-section hidden">
+      <div class="history-header">
+        <h2 data-i18n-key="historyTitle">Historial</h2>
+        <button id="clearHistoryBtn" class="btn btn-secondary hidden" data-i18n-key="clearHistory">Limpiar historial</button>
+      </div>
+      <div id="historyContainer" class="history-container"></div>
+    </section>
+
+    <div class="main-grid">
+        <section class="policy-section">
+          <h2 data-i18n-key="privacyTitle">Política de Privacidad</h2>
+          <p data-i18n-key="privacyDesc1">Tus imágenes se procesan en tu dispositivo y nunca se suben a un servidor. El historial se guarda localmente en la base de datos de tu navegador. <br>Si tienes dudas sobre la privacidad, puedes consultar nuestra política completa en el siguiente <a href="https://chococreativo.com.co/politica-privacidad">enlace</a>.</br></p>
+        </section>
+        <section class="policy-section">
+          <h2 data-i18n-key="howToTitle">Cómo Usar</h2>
+          <div id="howToContainer" class="how-to-steps">
+              </div>
+        </section>
+    </div>
+  </main> <footer>
     <span>© 2025 by Kevin Hurtado. Todos los derechos reservados.</span>
     <a href="#" id="versionLink">Novedades V3</a>
     <a href="#" id="donateLink" class="btn" data-i18n-key="donate">Donar con PayPal</a>
